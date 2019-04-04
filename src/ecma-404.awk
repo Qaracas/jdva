@@ -1,31 +1,4 @@
-#!/usr/bin/gawk -E
-BEGIN {
-    cad_json[0] = "";
-    linea = "";
-
-    while ((getline linea < ARGV[1]) > 0)
-        cad_json[0] = cad_json[0] linea;
-    close(ARGV[1]);
-    
-    jsonLstm(cad_json, lista);
-    
-    pinta_elmtos(lista);
-}
-
-
-function pinta_elmtos(lista,      i, j, sep, dri)
-{
-    PROCINFO["sorted_in"] = "@ind_num_asc";
-    for (i in lista) {
-        split(i, sep, SUBSEP);
-        dri = "";
-        for (j in sep)
-            dri = dri "[" sep[j] "]";
-        printf("%s = %s\n", dri, lista[i]);
-    }
-}
-
-function perror(txt)
+function _perror(txt)
 {
     printf ("%s\n", txt) > "/dev/stderr";
     exit -1;
@@ -116,33 +89,42 @@ function _nuevo(lista, elem, valor, pos,     nuevo, a)
 function jsonLstm(json, lst, id,     a, x, c, i, j, n)
 {
     if (!isarray(json)) {
-        perror("El primer argumento debe ser un puntero");
+        _perror("El primer argumento debe ser un puntero");
     }
         
     c = ""; a = 1; i = 1; j = 1;
-    x["{"] = 0; x["}"] = 0; x["["] = 0; x["]"] = 0; x["\""] = 0;
+    x["{"] = 0; x["}"] = 0; x["["] = 0; x["]"] = 0;
+    x["\042"] = 0; x["sal"] = 0;
 
     _json_a_lst_elmtos(json);
     
-    while ((c = substr(json[0], i++, 1)) != "") {
+    for (;;) {
+		if ((c = substr(json[0], i++, 1)) == "") {
+		    if (x["sal"] >= 1)
+                break;
+            else {
+                x["sal"]++;
+                c = ",";
+            }
+		}
         switch (c) {
         case "{":
-            if (i > 2) x["{"]++;
+            x["{"]++;
             break;
         case "}":
             x["}"]++;
             break;
         case "[":
-            if (i > 2) x["["]++;
+            x["["]++;
             break;
         case "]":
             x["]"]++;
             break;
-        case "\"":
-            x["\""]++;
+        case "\042":
+            x["\042"]++;
             break;
         case ",":
-            if ((x["\""] % 2 == 0) &&
+            if ((x["\042"] % 2 == 0) &&
                 (x["{"] == x["}"]) && (x["["] == x["]"]))
             {
                 x[0] = substr(json[0], a, (i - a - 1));
@@ -164,18 +146,17 @@ function jsonLstm(json, lst, id,     a, x, c, i, j, n)
         default:
             break;
         }
-    }  
-    x[0] = substr(json[0], a, (i - a));
-    if (_esjson(x[0]))
-        jsonLstm(x, lst, _id(j, id));
-    else {
-        n = _nuevo(lst, id, x, j);
-        if (n != _id(j, id) &&
-            _esjson(lst[n]))
-        {
-            x[0] = lst[n];
-            delete lst[n];
-            jsonLstm(x, lst, n);
-        }
+    }
+}
+
+function pinta_elmtos(lista,      i, j, sep, dri)
+{
+    PROCINFO["sorted_in"] = "@ind_num_asc";
+    for (i in lista) {
+        split(i, sep, SUBSEP);
+        dri = "";
+        for (j in sep)
+            dri = dri "[" sep[j] "]";
+        printf("%s = %s\n", dri, lista[i]);
     }
 }
