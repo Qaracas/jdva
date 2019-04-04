@@ -1,0 +1,16 @@
+#!/usr/bin/gawk -E
+
+@include "../src/ecma-404.awk"
+
+BEGIN {
+    cad_json[0] = "";
+    linea = "";
+
+    while ((getline linea < ARGV[1]) > 0)
+        cad_json[0] = cad_json[0] linea;
+    close(ARGV[1]);
+    
+    jsonLstm(cad_json, lista);
+    
+    pinta_elmtos(lista);
+}
