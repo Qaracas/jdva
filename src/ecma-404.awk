@@ -47,9 +47,10 @@ function _id(c, id)
         return c;
 }
 
-function _p2pnts(txt,     a, c, i)
+function _p2pnts(txt,      a, c, i)
 {
     i = 0;
+    
     while ((c = substr(txt[0], i++, 1)) != "") {
         if (c == ":" && a == "\042")
             break;
@@ -59,7 +60,7 @@ function _p2pnts(txt,     a, c, i)
     return i;
 }
 
-function _nuevo(lista, elem, valor, pos,     nuevo, a)
+function _nuevo(lista, elem, valor, pos,      n, a)
 {
     # Si es un par "nombre : valor" modificar valor y pos
     if (valor[0] ~ /[ \t]*\042[^\042]+\042[ \t]*:.+/) {
@@ -70,11 +71,11 @@ function _nuevo(lista, elem, valor, pos,     nuevo, a)
         gsub(/\042/, "", pos); _trim(valor, 0);
     }
     
-    nuevo = _id(pos, elem);
+    n = _id(pos, elem);
     _trim(valor, 0);
-    lista[nuevo] = valor[0];
-    _trim(lista, nuevo);
-    return nuevo;
+    lista[n] = valor[0];
+    _trim(lista, n);
+    return n;
 }
 
 ##
@@ -86,7 +87,7 @@ function _nuevo(lista, elem, valor, pos,     nuevo, a)
 #   - lst  = Colección con los elementos de la cadena JSON original.
 #
 ##
-function jsonLstm(json, lst, id,     a, x, c, i, j, n)
+function jsonLstm(json, lst, id,      a, x, c, i, j, n)
 {
     if (!isarray(json)) {
         _perror("El primer argumento debe ser un puntero");
@@ -149,14 +150,67 @@ function jsonLstm(json, lst, id,     a, x, c, i, j, n)
     }
 }
 
-function pinta_elmtos(lista,      i, j, sep, dri)
+function _nvp_json(nivel, subidc,      i, j)
+{
+    json = "";
+
+    if (nivel[1] == nivel[0])
+        if (subidc[1][nivel[1]] !~ /^[0-9]+$/)
+            json = "\042" subidc[1][nivel[1]] "\042:";
+    
+    if (nivel[1] > nivel[0])
+        for (i in subidc[1])
+            if (i >= nivel[0])
+                if (subidc[1][i] !~ /^[0-9]+$/)
+                    json = json "" \
+                        ((i > nivel[0]) ? "{" : "") \
+                        "\042" subidc[1][i] "\042:";
+                else
+                    json = json "" ((i > nivel[0]) ? "[" : "");
+    
+    if (nivel[1] < nivel[0]) {
+        for (j = nivel[0]; j > nivel[1]; j--)
+            json = json "" ((subidc[0][j] !~ /^[0-9]+$/) ? "}" : "]");
+        if (subidc[1][nivel[1]] !~ /^[0-9]+$/)
+            json = json "\042" subidc[1][nivel[1]] "\042:";
+    }
+        
+    return json;
+}
+
+function lstmJson(lst, json,      i, j, s, n, p)
+{
+    delete json;
+    json[0] = "";
+    n[0] = 0; n[1] = 0;         # Nivel anterior y nivel actual
+    s[0][1] = ""; s[1][1] = ""; # Subíndice anterior y subíndice actual
+
+    PROCINFO["sorted_in"] = "@ind_num_asc";
+    for (i in lst) {
+        n[1] = split(i, s[1], SUBSEP);
+        p = _nvp_json(n, s);
+        if (p ~ /[\]\}]+$/) {
+            gsub(/,$/,"", json[0]);
+            json[0] = json[0] p ",";
+        } else {
+            json[0] = json[0] p;
+        }
+        json[0] = json[0] "\042" lst[i] "\042" ",";
+        n[0] = n[1];
+        delete s[0];
+        for (j in s[1])
+            s[0][j] = s[1][j];
+    } 
+}
+
+function pinta_elmtos(lista,      i, j, s, d)
 {
     PROCINFO["sorted_in"] = "@ind_num_asc";
     for (i in lista) {
-        split(i, sep, SUBSEP);
-        dri = "";
-        for (j in sep)
-            dri = dri "[" sep[j] "]";
-        printf("%s = %s\n", dri, lista[i]);
+        split(i, s, SUBSEP);
+        d = "";
+        for (j in s)
+            d = d "[" s[j] "]";
+        printf("%s = %s\n", d, lista[i]);
     }
 }
