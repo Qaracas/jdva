@@ -1,0 +1,57 @@
+#!/usr/bin/gawk -E
+
+@include "../src/ecma-404.awk"
+
+BEGIN {
+    cad_json01[0] = "";
+    cad_json02[0] = "";
+    json01 = "";
+    json02 = "";
+    linea = "";
+
+    while ((getline linea < ARGV[1]) > 0)
+        cad_json01[0] = cad_json01[0] linea;
+    close(ARGV[1]);
+    json01 = cad_json01[0];
+    
+    jsonLstm(cad_json01, lista01);
+
+    lstmJson(lista01, cad_json02);
+     
+    print cad_json02[0]; exit 0;
+    
+    json02 = cad_json02[0];
+
+    jsonLstm(cad_json02, lista02);
+    
+    for (i in lista01)
+        if (i in lista02) {
+            if (lista02[i] != lista01[i]) {
+                print "Error: El elemento " i " original no coincide en destino.";
+                print "<< Lista origen:"
+                pinta_elmtos(lista01);
+                print ">> Lista destino:"
+                pinta_elmtos(lista02);
+                print "<< JSON origen:"
+                print json01;
+                print ">> JSON destino:"
+                print json02;
+                print
+                exit -1;
+            }
+        } else {
+            print "Error: El elemento " i " original no existe en destino.";
+            print "<< Lista origen:"
+            pinta_elmtos(lista01);
+            print ">> Lista destino:"
+            pinta_elmtos(lista02);
+            print "<< JSON origen:"
+            print json01;
+            print ">> JSON destino:"
+            print json02;
+            exit -1;
+        }
+     
+    print "Verificación correcta."
+    exit 0;
+}

@@ -1,3 +1,7 @@
+BEGIN {
+    CNTSEC = 1;
+}
+
 function _perror(txt)
 {
     printf ("%s\n", txt) > "/dev/stderr";
@@ -15,7 +19,13 @@ function _perror(txt)
 ##
 function _trim(str, idx)
 {
-    return gsub(/^([ \t]+|\042{1})|([ \t]+|\042{1})$/, "", str[idx]);
+    return gsub(/^[ \t]*(\042{1})*|(\042{1})*[ \t]*$/, "", str[idx]);
+}
+
+function __trim(str)
+{
+    gsub(/^[ \t]*(\042{1})*|(\042{1})*[ \t]*$/, "", str);
+    return str;
 }
 
 ##
@@ -47,34 +57,36 @@ function _id(c, id)
         return c;
 }
 
-function _p2pnts(txt,      a, c, i)
+##
+#
+# Cada elemento de la lista es a su vez una lista de 3 elementos:
+# lista[X][Y]; donde X es el índice JSON, e Y será:
+# [1] = Es el valor del elemento JSON
+# [2] = Es el tipo. Será "s" = es cadena; "n" = no es cadena
+# [3] = 1    = elemento primero en lista u objeto
+#       NULO = nada: elemento medio o final de lista u objeto
+#
+##
+function _nuevo(lista, elem, valor, pos,      n, o)
 {
-    i = 0;
-    
-    while ((c = substr(txt[0], i++, 1)) != "") {
-        if (c == ":" && a == "\042")
-            break;
-        if (c !~ /[ \t]/)
-            a = c;
-    }
-    return i;
-}
-
-function _nuevo(lista, elem, valor, pos,      n, a)
-{
+    if (pos == 1) o = 1;
     # Si es un par "nombre : valor" modificar valor y pos
     if (valor[0] ~ /[ \t]*\042[^\042]+\042[ \t]*:.+/) {
-        _trim(valor, 0);       
-        pos = substr(valor[0], 1, _p2pnts(valor) - 2);
-        valor[0] = substr(valor[0], _p2pnts(valor),
-                          (length(valor[0]) - _p2pnts(valor)) + 1);
-        gsub(/\042/, "", pos); _trim(valor, 0);
+        pos = substr(valor[0], 1, index(valor[0], ":") - 2);
+        valor[0] = substr(valor[0], index(valor[0], ":") + 1,
+                          (length(valor[0]) - index(valor[0], ":")) + 1);
+        pos = __trim(pos);
     }
     
     n = _id(pos, elem);
+    if (o == 1)
+        lista[CNTSEC][n][3] = 1;
+
+    lista[CNTSEC][n][2] = \
+        (valor[0] ~ /^[ \t]*\042[^\042]*\042[ \t]*$/) ? "s" : "n";
     _trim(valor, 0);
-    lista[n] = valor[0];
-    _trim(lista, n);
+    lista[CNTSEC][n][1] = valor[0];
+    
     return n;
 }
 
@@ -84,18 +96,18 @@ function _nuevo(lista, elem, valor, pos,      n, a)
 #
 # Argumentos:
 #   - json = Puntero a cadena JSON.
-#   - lst  = Colección con los elementos de la cadena JSON original.
+#   - lista  = Colección con los elementos de la cadena JSON original.
 #
 ##
-function jsonLstm(json, lst, id,      a, x, c, i, j, n)
+function jsonLstm(json, lista, id,     a, x, c, i, j, n)
 {
     if (!isarray(json)) {
         _perror("El primer argumento debe ser un puntero");
     }
-        
-    c = ""; a = 1; i = 1; j = 1;
-    x["{"] = 0; x["}"] = 0; x["["] = 0; x["]"] = 0;
-    x["\042"] = 0; x["sal"] = 0;
+    
+    c = n = ""; a = i = j = 1;
+    x["{"] = x["}"] = x["["] = x["]"] = 0;
+    x["\042"] = x["sal"] = 0;
 
     _json_a_lst_elmtos(json);
     
@@ -130,17 +142,18 @@ function jsonLstm(json, lst, id,      a, x, c, i, j, n)
             {
                 x[0] = substr(json[0], a, (i - a - 1));
                 if (_esjson(x[0]))
-                    jsonLstm(x, lst, _id(j++, id));
+                    jsonLstm(x, lista, _id(j++, id));
                 else {
-                    n = _nuevo(lst, id, x, j++);
+                    n = _nuevo(lista, id, x, j++);
                     if (n != _id((j - 1), id) &&
-                        _esjson(lst[n]))
+                        _esjson(lista[CNTSEC][n][1]))
                     {
-                        x[0] = lst[n];
-                        delete lst[n];
-                        jsonLstm(x, lst, n);
+                        x[0] = lista[CNTSEC][n][1];
+                        delete lista[CNTSEC][n];
+                        jsonLstm(x, lista, n);
                     }
                 }
+                CNTSEC++;
                 a = i;
             }
             break;
@@ -150,67 +163,68 @@ function jsonLstm(json, lst, id,      a, x, c, i, j, n)
     }
 }
 
-function _nvp_json(nivel, subidc,      i, j)
+function lstmJson(lista, json,      i, j, k, z, s, n, m)
 {
-    json = "";
-
-    if (nivel[1] == nivel[0])
-        if (subidc[1][nivel[1]] !~ /^[0-9]+$/)
-            json = "\042" subidc[1][nivel[1]] "\042:";
-    
-    if (nivel[1] > nivel[0])
-        for (i in subidc[1])
-            if (i >= nivel[0])
-                if (subidc[1][i] !~ /^[0-9]+$/)
-                    json = json "" \
-                        ((i > nivel[0]) ? "{" : "") \
-                        "\042" subidc[1][i] "\042:";
-                else
-                    json = json "" ((i > nivel[0]) ? "[" : "");
-    
-    if (nivel[1] < nivel[0]) {
-        for (j = nivel[0]; j > nivel[1]; j--)
-            json = json "" ((subidc[0][j] !~ /^[0-9]+$/) ? "}" : "]");
-        if (subidc[1][nivel[1]] !~ /^[0-9]+$/)
-            json = json "\042" subidc[1][nivel[1]] "\042:";
+    if (!isarray(lista) || !isarray(json)) {
+        _perror("El primer y segundo argumentos deben ser un punteros");
     }
-        
-    return json;
-}
-
-function lstmJson(lst, json,      i, j, s, n, p)
-{
+    
     delete json;
     json[0] = "";
     n[0] = 0; n[1] = 0;         # Nivel anterior y nivel actual
     s[0][1] = ""; s[1][1] = ""; # Subíndice anterior y subíndice actual
-
+    
     PROCINFO["sorted_in"] = "@ind_num_asc";
-    for (i in lst) {
-        n[1] = split(i, s[1], SUBSEP);
-        p = _nvp_json(n, s);
-        if (p ~ /[\]\}]+$/) {
-            gsub(/,$/,"", json[0]);
-            json[0] = json[0] p ",";
-        } else {
-            json[0] = json[0] p;
+    for (i in lista) {
+        for (j in lista[i]) {
+            n[1] = split(j, s[1], SUBSEP);
+            break;
         }
-        json[0] = json[0] "\042" lst[i] "\042" ",";
+        
+        if (3 in lista[i][j]) {
+            if (n[0] == 0) { 
+                n[0] = 1;
+                m = 2
+            } else {
+                m = n[1];
+            }
+            if (n[0] == n[1] && i > 1) {
+                gsub(/,$/, "", json[0]);
+                json[0] = json[0] \
+                    ((s[0][n[0] - 1] ~ /^[0-9]+$/) ? "]" : "}") "," \
+                    ((s[1][n[1]] ~ /^[0-9]+$/) ? "[" : "{");
+            }
+            for (k = n[0]; k < m; k++)
+                if (s[1][k] ~ /^[0-9]+$/)
+                    json[0] = json[0] "[";
+                else
+                    json[0] = json[0] "{" "\042" s[1][k] "\042:";
+        }
+        
+        json[0] = json[0] ((lista[i][j][2] == "s") ? "\042" : "") \
+                 lista[i][j][1] ((lista[i][j][2] == "s") ? "\042" : "") ",";
+        
         n[0] = n[1];
         delete s[0];
-        for (j in s[1])
-            s[0][j] = s[1][j];
-    } 
+        for (z in s[1])
+            s[0][z] = s[1][z];
+    }    
 }
 
 function pinta_elmtos(lista,      i, j, s, d)
 {
     PROCINFO["sorted_in"] = "@ind_num_asc";
     for (i in lista) {
-        split(i, s, SUBSEP);
-        d = "";
-        for (j in s)
-            d = d "[" s[j] "]";
-        printf("%s = %s\n", d, lista[i]);
+        for (j in lista[i]) {
+            split(j, s, SUBSEP);
+            d = "";
+            for (k in s)
+                d = d "[" s[k] "]";
+            if (lista[i][j][2] == "s")
+                printf("%s = \042%s\042\n", d, lista[i][j][1]);
+            else
+                printf("%s = %s\n", d, lista[i][j][1]);
+            break;
+        }
     }
 }

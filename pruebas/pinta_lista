@@ -13,9 +13,4 @@ BEGIN {
     jsonLstm(cad_json, lista);
     
     pinta_elmtos(lista);
-
-    cad_json[0] = "";
-    lstmJson(lista, cad_json);
-
-    print cad_json[0];
 }
