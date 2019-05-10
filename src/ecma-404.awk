@@ -35,7 +35,7 @@ function __trim(str)
 # colección, elimina corchetes al inicio y fin de la cadena.
 #
 # Argumentos:
-#   -json = Puntero a cadena JSON.
+#   - json = Puntero a cadena JSON.
 ##
 function _json_a_lst_elmtos(json)
 {
@@ -67,15 +67,14 @@ function _id(c, id)
 #       NULO = nada: elemento medio o final de lista u objeto
 #
 ##
-function _nuevo(lista, elem, valor, pos,      n, o)
+function _nuevo(lista, elem, valor, pos,      n, o, i)
 {
     if (pos == 1) o = 1;
     # Si es un par "nombre : valor" modificar valor y pos
     if (valor[0] ~ /[ \t]*\042[^\042]+\042[ \t]*:.+/) {
-        pos = substr(valor[0], 1, index(valor[0], ":") - 2);
-        valor[0] = substr(valor[0], index(valor[0], ":") + 1,
-                          (length(valor[0]) - index(valor[0], ":")) + 1);
-        pos = __trim(pos);
+        i = index(valor[0], "\":");
+        pos = __trim(substr(valor[0], 1, i));
+        valor[0] = substr(valor[0], i + 2, (length(valor[0]) - i) + 1);
     }
     
     n = _id(pos, elem);
@@ -88,6 +87,33 @@ function _nuevo(lista, elem, valor, pos,      n, o)
     lista[CNTSEC][n][1] = valor[0];
     
     return n;
+}
+
+##
+#
+# Retorna el nivel, de dos elementos con más de un nivel, 
+# en el cual un nuevo elemento es diferente de otro.
+#
+# Argumentos:
+#   - nvl = Puntero con los dos niveles (subíndice anterior y actual)
+#
+# Resultado:
+#   -     0     = No se han encontrado elementos diferentes hasta el del menor
+#   - Nº entero = Que indica en que nivel difiere el subíndice actual con 
+#                 respecto al anterior
+#
+##
+function _nvl_cambia(nvl,      i, c)
+{
+    if (length(nvl[0]) > length(nvl[1]))
+        c = length(nvl[1]);
+    else
+        c = length(nvl[0]);
+    
+    for (i = 1; i <= c; i++)
+        if (nvl[0][i] != nvl[1][i])
+            return i;
+    return 0;
 }
 
 ##
@@ -105,6 +131,7 @@ function jsonLstm(json, lista, id,     a, x, c, i, j, n)
         _perror("El primer argumento debe ser un puntero");
     }
     
+    if (length(id) == 0) CNTSEC = 1;
     c = n = ""; a = i = j = 1;
     x["{"] = x["}"] = x["["] = x["]"] = 0;
     x["\042"] = x["sal"] = 0;
@@ -163,7 +190,16 @@ function jsonLstm(json, lista, id,     a, x, c, i, j, n)
     }
 }
 
-function lstmJson(lista, json,      i, j, k, z, s, n, m)
+##
+#
+# Trasformar lista multidimensional en JSON
+#
+# Argumentos:
+#   - json = Puntero a cadena JSON.
+#   - lista  = Colección de elementos estructurados.
+#
+##
+function lstmJson(lista, json,      i, j, k, z, s, n, x)
 {
     if (!isarray(lista) || !isarray(json)) {
         _perror("El primer y segundo argumentos deben ser un punteros");
@@ -171,7 +207,8 @@ function lstmJson(lista, json,      i, j, k, z, s, n, m)
     
     delete json;
     json[0] = "";
-    n[0] = 0; n[1] = 0;         # Nivel anterior y nivel actual
+    x[0] = 0;                   # Contador elementos
+    n[0] = 1; n[1] = 1;         # Nivel anterior y nivel actual
     s[0][1] = ""; s[1][1] = ""; # Subíndice anterior y subíndice actual
     
     PROCINFO["sorted_in"] = "@ind_num_asc";
@@ -181,28 +218,108 @@ function lstmJson(lista, json,      i, j, k, z, s, n, m)
             break;
         }
         
-        if (3 in lista[i][j]) {
-            if (n[0] == 0) { 
-                n[0] = 1;
-                m = 2
-            } else {
-                m = n[1];
-            }
-            if (n[0] == n[1] && i > 1) {
-                gsub(/,$/, "", json[0]);
-                json[0] = json[0] \
-                    ((s[0][n[0] - 1] ~ /^[0-9]+$/) ? "]" : "}") "," \
-                    ((s[1][n[1]] ~ /^[0-9]+$/) ? "[" : "{");
-            }
-            for (k = n[0]; k < m; k++)
-                if (s[1][k] ~ /^[0-9]+$/)
-                    json[0] = json[0] "[";
-                else
+        # 1 - Inicio cadena JSON
+        if (i == 1) {
+            for (k in s[1])
+                if (s[1][k] !~ /^[0-9]+$/)
                     json[0] = json[0] "{" "\042" s[1][k] "\042:";
+                else 
+                    json[0] = json[0] "[";
+        }
+        # 2, 3, 4 - Inicio nuevo elemento
+        else if (i > 1 && 3 in lista[i][j]) {
+            # 2 - Nivel superior respecto al anterior
+            if (n[1] > n[0]) {
+                # Cerrar listas anteriores, si las hay
+                if (_nvl_cambia(s) == 1 && n[0] > 1) {
+                    gsub(/,$/, "", json[0]);
+                    for (k = _nvl_cambia(s); k <= n[0]; k++)
+                        if (k > 1)
+                            if (s[0][k] ~ /^[0-9]+$/)
+                                json[0] = json[0] "]";
+                            else
+                                json[0] = json[0] "}";
+                    json[0] = json[0] ",";
+                }
+                for (k = _nvl_cambia(s); k <= n[1]; k++)
+                    if (s[1][k] ~ /^[0-9]+$/)
+                        json[0] = json[0] \
+                    ((k > n[0] || 
+                      (k == n[0] && 
+                       s[0][n[0]] !~ /^[0-9]+$/ && 
+                       s[1][k] ~ /^[0-9]+$/)) ? "[" : "");
+                    else
+                        json[0] = json[0] \
+                                ((k > _nvl_cambia(s) && \
+                                  (!(k in s[0]) || \
+                                   s[1][k] != s[0][k])) ? "{" : "") \
+                                "\042" s[1][k] "\042:";
+            }
+            # 3 - Nivel igual respecto al anterior
+            else if (n[1] == n[0]) {
+                gsub(/,$/, "", json[0]);
+                for (k = _nvl_cambia(s); k < n[0]; k++)
+                    json[0] = json[0] \
+                        ((s[0][k+1] ~ /^[0-9]+$/) ? "]" : "}");
+                json[0] = json[0] ",";
+                for (k = _nvl_cambia(s); k < n[0]; k++) {
+                    if (k == _nvl_cambia(s) && s[1][k] !~ /^[0-9]+$/)
+                        json[0] = json[0] "\042" s[1][k] "\042:";
+                    if (s[1][k+1] ~ /^[0-9]+$/)
+                        json[0] = json[0] "[";
+                    else
+                        json[0] = json[0] "{" "\042" s[1][k+1] "\042:";
+                }
+            }
+            # 4 - Nivel inferior respecto al anterior
+            else if (n[1] < n[0]) {
+                gsub(/,$/, "", json[0]);
+                for (k = n[0]; k > _nvl_cambia(s); k--)
+                    if (s[0][k] ~ /^[0-9]+$/)
+                        json[0] = json[0] "]";
+                    else
+                        json[0] = json[0] "}";
+                json[0] = json[0] ",";
+                for (k = _nvl_cambia(s); k <= n[1]; k++)
+                    if (s[1][k] ~ /^[0-9]+$/)
+                        json[0] = json[0] "[";
+                    else
+                        json[0] = json[0] \
+                            ((k == _nvl_cambia(s)) ? "" : "{") \
+                            "\042" s[1][k] "\042:";
+            }
+        }
+        # 5 - Nuevo elemento
+        else {
+            if (n[1] < n[0]) {
+                gsub(/,$/, "", json[0]);
+                for (k = n[0]; k > _nvl_cambia(s); k--)
+                    if (s[0][k] ~ /^[0-9]+$/)
+                        json[0] = json[0] "]";
+                    else
+                        json[0] = json[0] "}";
+                json[0] = json[0] ",";
+            }
+            if (s[1][n[1]] !~ /^[0-9]+$/)
+                json[0] = json[0] "\042" s[1][n[1]] "\042:";
         }
         
-        json[0] = json[0] ((lista[i][j][2] == "s") ? "\042" : "") \
-                 lista[i][j][1] ((lista[i][j][2] == "s") ? "\042" : "") ",";
+        if (lista[i][j][1] != "")
+            json[0] = json[0] \
+                    ((lista[i][j][2] == "s") ? "\042" : "") \
+                    lista[i][j][1] \
+                    ((lista[i][j][2] == "s") ? "\042" : "") ",";
+
+        # 6 - Fin de cadena JSON
+        if (++x[0] == length(lista)) {
+            gsub(/,$/, "", json[0]);
+            for (k = n[1]; k > 0; k--)
+                if (s[1][k] !~ /^[0-9]+$/)
+                    json[0] = json[0] "}";
+                else 
+                    json[0] = json[0] "]";
+            break;
+        }
         
         n[0] = n[1];
         delete s[0];
