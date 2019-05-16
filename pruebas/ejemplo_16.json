@@ -1,0 +1,42 @@
+[
+    {
+        "titulo": "Anestesia", 
+        "subtipos":["COANR1"]
+    },
+    {
+        "titulo": "Cirugia General y de Digestivo",
+        "subtipos":["COCGD1"]
+    },
+    {
+        "titulo": "Cirugia Maxilofacial",
+        "subtipos":["COCMF1"]
+    },
+    {
+        "titulo": "CPE",
+        "subtipos":["COCPE1"]
+    },
+    {
+        "titulo": "Cirugia Plastica",
+        "subtipos":["COCPL1"]
+    },
+    {
+        "titulo": "Cirugia Toracica",
+        "subtipos":["COCTO1"]
+    },
+    {
+        "titulo": "Dermatologia",
+        "subtipos":["CODER1"]
+    },
+    {
+        "titulo": "Neonatologia",
+        "subtipos":["CONEO1"]
+    },
+    {
+        "titulo": "Pediatria",
+        "subtipos":["COPED1"]
+    },
+    {
+        "titulo": "TRA",
+        "subtipos":["COTRA1"]
+    }
+]

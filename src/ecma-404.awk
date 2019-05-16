@@ -72,7 +72,8 @@ function _nuevo(lista, elem, valor, pos,      n, o, i)
     if (pos == 1) o = 1;
     # Si es un par "nombre : valor" modificar valor y pos
     if (valor[0] ~ /[ \t]*\042[^\042]+\042[ \t]*:.+/) {
-        i = index(valor[0], "\":");
+        gsub(/\042[ \t]*:/, "\042:", valor[0]);
+        i = index(valor[0], "\042:");
         pos = __trim(substr(valor[0], 1, i));
         valor[0] = substr(valor[0], i + 2, (length(valor[0]) - i) + 1);
     }
@@ -231,23 +232,17 @@ function lstmJson(lista, json,      i, j, k, z, s, n, x)
             # 2 - Nivel superior respecto al anterior
             if (n[1] > n[0]) {
                 # Cerrar listas anteriores, si las hay
-                if (_nvl_cambia(s) == 1 && n[0] > 1) {
-                    gsub(/,$/, "", json[0]);
-                    for (k = _nvl_cambia(s); k <= n[0]; k++)
-                        if (k > 1)
-                            if (s[0][k] ~ /^[0-9]+$/)
-                                json[0] = json[0] "]";
-                            else
-                                json[0] = json[0] "}";
-                    json[0] = json[0] ",";
-                }
+                gsub(/,$/, "", json[0]);
+                for (k = n[0]; k > _nvl_cambia(s); k--)
+                    if (s[0][k] ~ /^[0-9]+$/)
+                        json[0] = json[0] "]";
+                    else
+                        json[0] = json[0] "}";
+                json[0] = json[0] ",";
                 for (k = _nvl_cambia(s); k <= n[1]; k++)
                     if (s[1][k] ~ /^[0-9]+$/)
                         json[0] = json[0] \
-                    ((k > n[0] || 
-                      (k == n[0] && 
-                       s[0][n[0]] !~ /^[0-9]+$/ && 
-                       s[1][k] ~ /^[0-9]+$/)) ? "[" : "");
+                            ((s[1][k]+0 == 1) ? "[" : "");
                     else
                         json[0] = json[0] \
                                 ((k > _nvl_cambia(s) && \
@@ -258,9 +253,11 @@ function lstmJson(lista, json,      i, j, k, z, s, n, x)
             # 3 - Nivel igual respecto al anterior
             else if (n[1] == n[0]) {
                 gsub(/,$/, "", json[0]);
-                for (k = _nvl_cambia(s); k < n[0]; k++)
-                    json[0] = json[0] \
-                        ((s[0][k+1] ~ /^[0-9]+$/) ? "]" : "}");
+                for (k = n[0]; k > _nvl_cambia(s); k--)
+                    if (s[0][k] ~ /^[0-9]+$/)
+                        json[0] = json[0] "]";
+                    else
+                        json[0] = json[0] "}";
                 json[0] = json[0] ",";
                 for (k = _nvl_cambia(s); k < n[0]; k++) {
                     if (k == _nvl_cambia(s) && s[1][k] !~ /^[0-9]+$/)
@@ -281,9 +278,11 @@ function lstmJson(lista, json,      i, j, k, z, s, n, x)
                         json[0] = json[0] "}";
                 json[0] = json[0] ",";
                 for (k = _nvl_cambia(s); k <= n[1]; k++)
-                    if (s[1][k] ~ /^[0-9]+$/)
-                        json[0] = json[0] "[";
-                    else
+                    if (s[1][k] ~ /^[0-9]+$/) {
+                        if (!(s[0][k] ~ /^[0-9]+$/ && \
+                              (s[1][k]+0) > (s[0][k]+0)))
+                            json[0] = json[0] "[";
+                    } else
                         json[0] = json[0] \
                             ((k == _nvl_cambia(s)) ? "" : "{") \
                             "\042" s[1][k] "\042:";
@@ -309,6 +308,9 @@ function lstmJson(lista, json,      i, j, k, z, s, n, x)
                     ((lista[i][j][2] == "s") ? "\042" : "") \
                     lista[i][j][1] \
                     ((lista[i][j][2] == "s") ? "\042" : "") ",";
+        else
+            if (lista[i][j][2] == "s")
+                json[0] = json[0] "\042\042,";
 
         # 6 - Fin de cadena JSON
         if (++x[0] == length(lista)) {
@@ -328,20 +330,35 @@ function lstmJson(lista, json,      i, j, k, z, s, n, x)
     }    
 }
 
-function pinta_elmtos(lista,      i, j, s, d)
+function pinta_elmtos(lista, frmt,      i, j, f)
 {
+    if (length(frmt) == 0)
+        f = "_pinta_sin_frmt";
+    else
+        f = "_pinta_frmt";
+    
     PROCINFO["sorted_in"] = "@ind_num_asc";
     for (i in lista) {
         for (j in lista[i]) {
-            split(j, s, SUBSEP);
-            d = "";
-            for (k in s)
-                d = d "[" s[k] "]";
-            if (lista[i][j][2] == "s")
-                printf("%s = \042%s\042\n", d, lista[i][j][1]);
-            else
-                printf("%s = %s\n", d, lista[i][j][1]);
+            @f(lista[i][j], j, frmt);
             break;
         }
     }
+}
+
+function _pinta_frmt(txt, idc, frmt,      k, s, d) 
+{
+    printf(frmt, txt[1]);
+}
+
+function _pinta_sin_frmt(txt, idc, frmt,      k, s, d) 
+{
+    split(idc, s, SUBSEP);
+    d = "";
+    for (k in s)
+        d = d "[" s[k] "]";
+    if (txt[2] == "s")
+        printf("%s = \042%s\042\n", d, txt[1]);
+    else
+        printf("%s = %s\n", d, txt[1]);    
 }
