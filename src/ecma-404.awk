@@ -132,7 +132,10 @@ function jsonLstm(json, lista, id,     a, x, c, i, j, n)
         _perror("El primer argumento debe ser un puntero");
     }
     
-    if (length(id) == 0) CNTSEC = 1;
+    if (length(id) == 0) {
+        CNTSEC = 1;
+        delete lista;
+    }
     c = n = ""; a = i = j = 1;
     x["{"] = x["}"] = x["["] = x["]"] = 0;
     x["\042"] = x["sal"] = 0;

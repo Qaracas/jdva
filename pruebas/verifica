@@ -3,62 +3,107 @@
 @include "../src/ecma-404.awk"
 
 BEGIN {
-    cad_json01[0] = "";
-    cad_json02[0] = "";
+    LOG = "./resultado_pruebas.log";
+    DFP = ".";
+    
+    cad_json01[0];
+    cad_json02[0];
     json01 = "";
     json02 = "";
+    
+    fdpj = "";
+    
+    system("ls "DFP"/*.json > /tmp/vrfc.tmp")
+#    print "ls "DFP"/*.json" |& "sh";
+#    while (("sh" |& getline v) > 0)
+    while ((getline fdpj < "/tmp/vrfc.tmp") > 0) {
+        printf("Probando \042"fdpj"\042... ")
+        plog("Iniciando batería de pruebas con \042"fdpj"\042...\n",
+                1, "INFO");
+        
+        cad_json01[0] = "";
+        while ((getline linea < fdpj) > 0)
+            cad_json01[0] = cad_json01[0] linea;
+        close(fdpj);
+        
+        json01 = cad_json01[0];
+        
+        plog("Convertir JSON_01 en lista_01... ", 1, "INFO");
+        jsonLstm(cad_json01, lista01);
+        plog("Hecho.\n");
 
-    while ((getline linea < ARGV[1]) > 0)
-        cad_json01[0] = cad_json01[0] linea;
-    close(ARGV[1]);
-    
-    json01 = cad_json01[0];
-    
-    printf("%s", "Convertir JSON 01 en lista 01... ");
-    jsonLstm(cad_json01, lista01);
-    print "Hecho.";
+        plog("Convertir lista_01 en JSON_02... ", 1, "INFO");
+        lstmJson(lista01, cad_json02);
+        plog("Hecho.\n");
+        
+        json02 = cad_json02[0];
+        
+        plog("Convertir JSON_02 en lista_02... ", 1, "INFO");
+        jsonLstm(cad_json02, lista02);
+        plog("Hecho.\n");
+        
+    #    print json02; exit 0;
 
-    printf("%s", "Convertir lista 01 en JSON 02... ");
-    lstmJson(lista01, cad_json02);
-    print "Hecho.";
-    
-    json02 = cad_json02[0];
-    
-    printf("%s", "Convertir JSON 02 en lista 02... ");
-    jsonLstm(cad_json02, lista02);
-    print "Hecho.";
-    
-    print json02; exit 0;
+    #    pinta_elmtos(lista01); 
+    #    print;
+    #    pinta_elmtos(lista02);
+    #    exit 0;
+        
+        if (compara(lista01, lista02) == 0) {
+            plog("¡Bien! \042"fdpj"\042 ha superado todas las pruebas.\n", 
+                    1, "INFO");
+            print("Hecho.")
+        } else {
+            print("Error (ver fichero de bitácora para más detalle).");
+        }
+    }
+    close("/tmp/vrfc.tmp");
+    exit 0;
+}
 
-#    pinta_elmtos(lista01); 
-#    print;
-#    pinta_elmtos(lista02);
-#    exit 0;
-    
+function compara(lista01, lista02)
+{
     for (i in lista01) {
         for (j in lista01[i]) {
             for (k in lista01[i][j]) {
                 if (!(i in lista02)) {
-                    printf "Error: No existe registro %s en resultado.", i;  
-                    exit -1;
+                    plog("Falta "i" en lista_02.", 1, "ERROR");
+                    return -1;
                 }
                 if (!(j in lista02[i])) {
-                    printf "Error: No existe elemento %s en registro %s.", j, i;  
-                    exit -1;
+                    plog("Falta "j" en lista_02["i"].", 1, "ERROR");
+                    return -1;
                 }
                 if (!(k in lista02[i][j])) {
-                    printf "Error: No existe componente %s en elemento %s.", k, j;  
-                    exit -1;
+                    plog("Falta "k" en lista_02["i"]["j"].", 1, "ERROR");
+                    return -1;
                 }
-                printf("Compara elemento %s de lista 01 y 02... ", i);
+                plog("Compara ["i"]["j"]["k"] en listas 01 y 02... ", 
+                        1, "INFO");
                 if (lista01[i][j][k] != lista02[i][j][k]) {
-                    print "Error.";
-                    exit -1; 
+                    plog("Error.\n");
+                    return -1;
                 }
-                print "Hecho.";
+                plog("Hecho.\n");
             }
         }
     }
-    print "¡Bien! Prueba superada."
-    exit 0;
+    return 0;
+}
+
+function plog(txt, stm, nvl)
+{
+    if (length(stm) == 0)
+        stm = "";
+    else
+        stm = fstm();
+    printf (((stm != "" && length(nvl) > 0) ? "%s %s - " : "") txt,
+                stm, nvl) >> LOG;
+}
+
+function fstm(frmt)
+{
+    if (length(frmt) == 0)
+        frmt = "%d/%m/%Y %H:%M:%S";
+    return strftime(frmt);
 }
