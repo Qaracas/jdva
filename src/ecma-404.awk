@@ -122,8 +122,8 @@ function _nvl_cambia(nvl,      i, c)
 # Trasformar JSON en lista multidimensional
 #
 # Argumentos:
-#   - json = Puntero a cadena JSON.
-#   - lista  = Colección con los elementos de la cadena JSON original.
+#   - json  = Puntero a cadena JSON.
+#   - lista = Colección con los elementos de la cadena JSON original.
 #
 ##
 function jsonLstm(json, lista, id,     a, x, c, i, j, n)
@@ -199,14 +199,14 @@ function jsonLstm(json, lista, id,     a, x, c, i, j, n)
 # Trasformar lista multidimensional en JSON
 #
 # Argumentos:
-#   - json = Puntero a cadena JSON.
-#   - lista  = Colección de elementos estructurados.
+#   - json  = Puntero a cadena JSON.
+#   - lista = Colección de elementos estructurados.
 #
 ##
 function lstmJson(lista, json,      i, j, k, z, s, n, x)
 {
     if (!isarray(lista) || !isarray(json)) {
-        _perror("El primer y segundo argumentos deben ser un punteros");
+        _perror("El primer y segundo argumentos deben ser punteros");
     }
     
     delete json;
@@ -333,7 +333,16 @@ function lstmJson(lista, json,      i, j, k, z, s, n, x)
     }    
 }
 
-function pinta_elmtos(lista, frmt,      i, j, f)
+##
+#
+# Pinta por pantalla una lista multidimensional
+#
+# Argumentos:
+#   - lista  = Colección con los elementos del texto JSON.
+#   - frmt   = Formato de representación. Por ejem.: "%s ,"
+#
+##
+function pinta(lista, frmt,      i, j, f)
 {
     if (length(frmt) == 0)
         f = "_pinta_sin_frmt";
@@ -364,4 +373,148 @@ function _pinta_sin_frmt(txt, idc, frmt,      k, s, d)
         printf("%s = \042%s\042\n", d, txt[1]);
     else
         printf("%s = %s\n", d, txt[1]);    
+}
+
+##
+#
+# Devuelve el valor de cualquier elemento de la lista JSON
+#
+# Argumentos:
+#   - lista  = Colección con los elementos del texto JSON.
+#   - elmnt  = Elemento a buscar en formato "a.b.c".
+#
+# Resultado:
+#   - El valor del elemento buscado ó -1, si el elemento no
+#     no existe en la lista.
+#
+##
+function trae(lista, elmnt)
+{
+    gsub(/\./, SUBSEP, elmnt);
+    gsub(/\\./, ".", elmnt);
+    for (i in lista) {
+        if (elmnt in lista[i])
+            return lista[i][elmnt][1];
+    }
+    return -1;
+}
+
+##
+#
+# Elimina cualquier elemento de la lista JSON
+#
+# Argumentos:
+#   - lista  = Colección con los elementos del texto JSON.
+#   - elmnt  = Elemento a buscar en formato "a.b.c".
+#
+# Resultado:
+#   - 0   = Ningún elemento eliminado.
+#   - > 0 = Posición del elemento eliminado.
+#
+##
+function quita(lista, elmnt,      i)
+{
+    gsub(/\./, SUBSEP, elmnt);
+    gsub(/\\./, ".", elmnt);
+    for (i in lista) {
+        if (elmnt in lista[i]) {
+            delete lista[i][elmnt];
+            return i;
+        }
+    }
+    return 0;
+}
+
+function _mismo_padre(a, b,      s1, s2, l1, l2)
+{
+    l1 = split(a, s1, SUBSEP);
+    l2 = split(b, s2, SUBSEP);
+    
+    if (l1 < l2+1)
+        return 0;
+    
+    for (i in s2)
+        if (s1[i] != s2[i])
+            return 0;
+    
+    return 1;
+}
+
+function _copia(a, b, m, n,      i)
+{
+    for (i in a[m]) {
+        b[n][i][1] = a[m][i][1];
+        b[n][i][2] = a[m][i][2];
+        if (3 in a[m][i])
+            b[n][i][3] = a[m][i][3];
+    }
+}
+
+function pon(lista, elmnt, valor,      i, j, k, x, s, lst, mp)
+{
+    gsub(/\./, SUBSEP, elmnt);
+    gsub(/\\./, ".", elmnt);
+
+    # Marca elemento anterior mismo padre
+    mp = 0;
+    # Tipo nuevo elemento
+    x[1] = ((typeof(valor) == "string") ? "s" : "n");
+    # Nivel nuevo elemento
+    x[2] = split(elmnt, s, SUBSEP);
+    # Nombre padre nuevo elemento
+    x[3] = "";
+    if (x[2] > 1)
+        for (i = 1; i < length(s); i++)
+            x[3] = x[3] ((length(x[3]) > 0) ? SUBSEP : "") s[i];
+    
+    # 01.- Lista vacía
+    if (length(lista) == 0) {
+        lista[1][elmnt][1] = valor;
+        lista[1][elmnt][2] = x[1];
+        lista[1][elmnt][3] = 1;
+        return 1;
+    }
+    
+    # 02.- Buscar el lista
+    for (i in lista) {   
+        if (elmnt in lista[i]) {
+            # Existe elemento. Cambiar el valor.
+            lista[i][elmnt][1] = valor;
+            lista[i][elmnt][2] = x[1];
+            delete lst;
+            return i;
+        } else {
+            # Ver si elemento tiene mismo padre que nuevo elemento.
+            for (j in lista[i]) {
+                if (x[2] > 1) {
+                    if (_mismo_padre(j, x[3])) {
+                        mp = 1;
+                    } else {
+                        if (mp) {
+                            lst[i][elmnt][1] = valor;
+                            lst[i][elmnt][2] = x[1];
+                            for (k in lista)
+                                if (k+0 > i+0)
+                                _copia(lista, lst, k, k+1);
+                            delete lista;
+                            for (k in lst)
+                                _copia(lst, lista, k, k);
+                            delete lst;
+                            return i;
+                        }
+                    }
+                }
+                break;
+            }
+        }
+        _copia(lista, lst, i, i);
+    }
+    
+    # 03.- Poner nuevo elemento al final.
+    lista[i+1][elmnt][1] = valor;
+    lista[i+1][elmnt][2] = x[1];
+    if (x[2] > 1)
+        lista[i][elmnt][3] = 1;
+    delete lst;
+    return length(lista);
 }

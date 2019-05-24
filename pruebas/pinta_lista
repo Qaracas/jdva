@@ -12,5 +12,9 @@ BEGIN {
     
     jsonLstm(cad_json, lista);
     
-    pinta_elmtos(lista);
+    pinta(lista);
+    print "";
+    pon(lista, "3.2", "Hola");
+    
+    pinta(lista);
 }
