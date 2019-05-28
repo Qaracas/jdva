@@ -127,4 +127,4 @@ Echa un ojo a la lista de [personas](https://github.com/Qaracas/sonak/contributo
 
 ## Licencia
 
-Este proyecto se distribuye bajo los términos de la Licencia Pública General de GNU (GNU GPL v3.0) - mira el archivo [LICENSE.md](LICENSE.md) para más detalle.
+Este proyecto se distribuye bajo los términos de la Licencia Pública General de GNU (GNU GPL v3.0) - mira el archivo [LICENSE](LICENSE) para más detalle.
