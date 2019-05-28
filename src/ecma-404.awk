@@ -514,7 +514,7 @@ function pon(lista, elmnt, valor,      i, j, k, x, s, lst, mp)
     lista[i+1][elmnt][1] = valor;
     lista[i+1][elmnt][2] = x[1];
     if (x[2] > 1)
-        lista[i][elmnt][3] = 1;
+        lista[i+1][elmnt][3] = 1;
     delete lst;
     return length(lista);
 }
