@@ -96,24 +96,24 @@ Resultado:
 
 ### Convertir lista multidimensional en JSON
 
-        #!/usr/bin/gawk -E
+    #!/usr/bin/gawk -E
 
-        @include "../src/ecma-404.awk"
+    @include "../src/ecma-404.awk"
 
-        BEGIN {
-            cad_json[0] = "";
-            
-            delete lista;
-            pon(lista, "nombre", "Pedro");
-            pon(lista, "apellidos", "Blanco Crespo");
-            pon(lista, "edad", 17);
-            pon(lista, "ciudad", "Madrid");
-            pon(lista, "datos.C\\.V\\.", "Computación");
+    BEGIN {
+        cad_json[0] = "";
+        
+        delete lista;
+        pon(lista, "nombre", "Pedro");
+        pon(lista, "apellidos", "Blanco Crespo");
+        pon(lista, "edad", 17);
+        pon(lista, "ciudad", "Madrid");
+        pon(lista, "datos.C\\.V\\.", "Computación");
 
-            lstmJson(lista, cad_json);
+        lstmJson(lista, cad_json);
 
-            print cad_json[0];
-        }
+        print cad_json[0];
+    }
 
 Resultado:
 
