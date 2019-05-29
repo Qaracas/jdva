@@ -2,7 +2,15 @@
 
 Es una interfaz de programación escrita en AWK que ofrece una serie de funciones para procesar textos en formato JSON.
 
-## Instalación
+## Requisitos
+
+### Windows
+Para que Sonak funcione en Windows es necesario tener AWK instalado. Existen algunos paquetes de AWK disponibles para Windows. Durante el desarrollo del proyecto se ha utilizado la versión `GNU Awk 4.2.1, API: 2.0 (GNU MPFR 4.0.1, GNU MP 6.1.2)` que proporciona el paquete [Git](https://git-scm.com/download/win), disponible para 32 y 64 bits.
+
+### Linux
+La mayoría de distribuciones de Linux vienen con AWK instalado de base.
+
+### Instalación
 
 1. Descarga el proyecto completo escribiendo:
 

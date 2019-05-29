@@ -1,3 +1,123 @@
+# Documentación
+
+## Interfaz de programación
+
+<table>
+<tr>
+<th align="left">
+jsonLstm
+</th>
+</tr>
+<tr>
+<td>
+<pre>
+
+**function jsonLstm(json, lista)**
+
+Trasforma una cadena de texto en formato JSON en una lista multidimensional 
+(en adelante nombrada como lista jotasonizada).
+
+**Argumentos:**
+   json  - Puntero a cadena de texto en formato JSON.
+   lista - Lista multidimensional jotasonizada.
+</pre>
+</td>
+</tr>
+<tr>
+<th align="left">
+lstmJson
+</th>
+</tr>
+<tr>
+<td>
+<pre>
+
+**function lstmJson(lista, json)**
+
+Trasforma una lista multidimensional jotasonizada en una cadena de texto en formato JSON.
+
+**Argumentos:**
+    json  - Puntero a cadena de texto en formato JSON.
+    lista - Lista multidimensional jotasonizada.
+</pre>
+</td>
+</tr>
+<tr>
+<th align="left">
+pinta
+</th>
+</tr>
+<tr>
+<td>
+<pre>
+
+**function pinta(lista, frmt)**
+
+Pinta por pantalla una lista multidimensional
+
+**Argumentos:**
+    lista - Lista multidimensional jotasonizada.
+    frmt  - Formato de representación. Por ejemplo: "%s ,"
+</pre>
+</td>
+</tr>
+<tr>
+<th align="left">
+trae
+</th>
+</tr>
+<tr>
+<td>
+
+**function trae (lista, elmnt)**
+
+Busca un elemento localizado dentro de una lista multidimensional jotasonizada y devuelve su valor.
+
+**Argumentos:**
+    lista - Lista multidimensional jotasonizada.
+    elmnt - Elemento a buscar en formato "a.b.c".
+</pre>
+</td>
+</tr>
+<tr>
+<th align="left">
+quita
+</th>
+</tr>
+<tr>
+<td>
+
+**function quita(lista, elmnt)**
+
+Elimina elementos de una lista multidimensional jasonizada.
+
+**Argumentos:**
+    lista - Lista multidimensional jotasonizada.
+    elmnt - Elemento a aliminar en formato "a.b.c".
+</pre>
+</td>
+</tr>
+<tr>
+<th align="left">
+pon
+</th>
+</tr>
+<tr>
+<td>
+
+**function pon(lista, elmnt, valor)**
+
+Añade un nuevo elemento a la lista jotasonizada o modifica el valor de uno ya existente.
+
+**Argumentos:**
+    lista - Lista multidimensional jotasonizada.
+    elmnt - Elemento para añadir/modificar en formato "a.b.c".
+    valor - Valor del nuevo elemento o nuevo valor para el elemento ya existente.
+</pre>
+</td>
+</tr>
+</table> 
+ 
 ## Ejemplos de uso
 
 ### Convertir JSON en lista multidimensional
