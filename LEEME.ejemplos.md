@@ -68,8 +68,9 @@ trae
 </tr>
 <tr>
 <td>
+<pre>
 
-**function trae (lista, elmnt)**
+**function trae(lista, elmnt)**
 
 Busca un elemento localizado dentro de una lista multidimensional jotasonizada y devuelve su valor.
 
@@ -86,6 +87,7 @@ quita
 </tr>
 <tr>
 <td>
+<pre>
 
 **function quita(lista, elmnt)**
 
@@ -104,6 +106,7 @@ pon
 </tr>
 <tr>
 <td>
+<pre>
 
 **function pon(lista, elmnt, valor)**
 
