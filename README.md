@@ -1,6 +1,6 @@
 # Sonak
 
-Es una interfaz de programación escrita en AWK que ofrece una serie de funciones para procesar textos en formato JSON.
+Es una interfaz de programación escrita en [AWK](https://www.gnu.org/software/gawk/manual/gawk.html) que ofrece una serie de funciones para procesar y crear textos en formato [JSON](https://json.org/json-es.html).
 
 ## Requisitos
 

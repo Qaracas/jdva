@@ -77,6 +77,11 @@ Busca un elemento localizado dentro de una lista multidimensional jotasonizada y
 **Argumentos:**
     lista - Lista multidimensional jotasonizada.
     elmnt - Elemento a buscar en formato "a.b.c".
+    
+**Resultado:***
+    - Si el elemento existe en la lista devuelve su valor y, ademas,
+      pone RFUNC["trae"] a 1.
+    - Si no existe el elemento devuelve "" y, además, pone RFUNC["trae"] a 0.
 </pre>
 </td>
 </tr>
@@ -96,6 +101,11 @@ Elimina elementos de una lista multidimensional jasonizada.
 **Argumentos:**
     lista - Lista multidimensional jotasonizada.
     elmnt - Elemento a aliminar en formato "a.b.c".
+    
+**Resultado:**
+    - Si el elemento existe en la lista lo elimina y devuelve su posición.
+      Ademas, pone RFUNC["quita"] a 1.
+    - Si no existe el elemento devuelve 0 y, además, pone RFUNC["quita"] a 0.
 </pre>
 </td>
 </tr>
@@ -116,6 +126,10 @@ Añade un nuevo elemento a la lista jotasonizada o modifica el valor de uno ya e
     lista - Lista multidimensional jotasonizada.
     elmnt - Elemento para añadir/modificar en formato "a.b.c".
     valor - Valor del nuevo elemento o nuevo valor para el elemento ya existente.
+
+**Resultado:**
+    - Devuelve la posición del nuevo elemento la posición del que se haya
+      modificado en caso de que existiese. 
 </pre>
 </td>
 </tr>
