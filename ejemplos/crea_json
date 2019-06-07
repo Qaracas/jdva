@@ -1,0 +1,41 @@
+#!/usr/bin/gawk -E
+
+@include "../src/ecma-404.awk"
+
+BEGIN {
+    delete lista;
+    pon(lista, "identificación.nombre", "Pedro");
+    pon(lista, "identificación.apellidos", "Blanco Crespo");
+    pon(lista, "identificación.edad", 17);
+    pon(lista, "domicilio.pais", "España");
+    pon(lista, "domicilio.autonomía", "Comunidad de Madrid");
+    pon(lista, "domicilio.provincia", "Madrid");
+    pon(lista, "domicilio.población", "Madrid");
+    pon(lista, "domicilio.dirección.tipo", "Calle");
+    pon(lista, "domicilio.dirección.calle", "Jacometrezo");
+    pon(lista, "domicilio.dirección.número", 32);
+    pon(lista, "domicilio.dirección.bloque", 1);
+
+    if (ARGC > 1)
+        usar();
+
+    cad_json[0] = "";
+        
+    lstmJson(lista, cad_json);
+    
+    print cad_json[0];
+    
+    exit 0;
+}
+
+function usar()
+{
+    printf "%s\n\n%s\n%s\n\n",
+    "usar: crea_json [--ayuda]",
+    "Pinta por pantalla un texto en formato JSON, creado a partir de la", 
+    "siguiente lista multidimensional:";
+    
+    pinta(lista);
+    
+    exit -1;
+}

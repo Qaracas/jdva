@@ -1,0 +1,40 @@
+#!/usr/bin/gawk -E
+
+@include "../src/ecma-404.awk"
+
+BEGIN {
+    if (ARGC != 3 ||
+        ARGV[1] == "--ayuda" ||
+        ARGV[1] !~ /^\.\.\/pruebas\/ejemplo_[0-9]{2}\.json$/ ||
+        ARGV[2] !~ /^[^\.]+(\.[^\.])*$/)
+        usar();
+
+    cad_json[0] = "";
+    linea = "";
+    elemento = "";
+    
+    while ((getline linea < ARGV[1]) > 0)
+        cad_json[0] = cad_json[0] linea;
+    close(ARGV[1]);
+    
+    jsonLstm(cad_json, lista);
+    
+    elemento = trae(lista, ARGV[2]);
+    
+    if (RFUNC["trae"]) {
+        print elemento;
+        exit 0;
+    } else {
+        print "El elemento " ARGV[2] " no se ha encontrado.";
+        exit -1;
+    }
+}
+
+function usar()
+{
+    printf "%s\n\n%s\n%s\n",
+    "usar: trae_elemento_lista [--ayuda] <../pruebas/ejemplo_XX.json> <nombre>",
+    "Pinta por pantalla el valor del elemento <nombre>, localizado en el texto",
+    "en formato JSON contenido dentro del fichero que se le pasa como argumento.";
+    exit -1;
+}
