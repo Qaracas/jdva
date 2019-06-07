@@ -1,5 +1,8 @@
 BEGIN {
     CNTSEC = 1;
+    
+    RFUNC["trae"]  = 0;
+    RFUNC["quita"] = 0;
 }
 
 function _perror(txt)
@@ -384,8 +387,9 @@ function _pinta_sin_frmt(txt, idc, frmt,      k, s, d)
 #   - elmnt  = Elemento a buscar en formato "a.b.c".
 #
 # Resultado:
-#   - El valor del elemento buscado ó -1, si el elemento no
-#     no existe en la lista.
+#   - Si el elemento existe en la lista devuelve su valor y, ademas,
+#     pone RFUNC["trae"] a 1.
+#   - Si no existe el elemento devuelve "" y, además, pone RFUNC["trae"] a 0.
 #
 ##
 function trae(lista, elmnt)
@@ -393,10 +397,13 @@ function trae(lista, elmnt)
     gsub(/\./, SUBSEP, elmnt);
     gsub(/\\./, ".", elmnt);
     for (i in lista) {
-        if (elmnt in lista[i])
+        if (elmnt in lista[i]) {
+            RFUNC["trae"]  = 1;
             return lista[i][elmnt][1];
+        }
     }
-    return -1;
+    RFUNC["trae"]  = 0;
+    return "";
 }
 
 ##
@@ -408,8 +415,9 @@ function trae(lista, elmnt)
 #   - elmnt  = Elemento a buscar en formato "a.b.c".
 #
 # Resultado:
-#   - 0   = Ningún elemento eliminado.
-#   - > 0 = Posición del elemento eliminado.
+#   - Si el elemento existe en la lista lo elimina y devuelve su posición.
+#     Ademas, pone RFUNC["quita"] a 1.
+#   - Si no existe el elemento devuelve 0 y, además, pone RFUNC["quita"] a 0.
 #
 ##
 function quita(lista, elmnt,      i)
@@ -419,9 +427,11 @@ function quita(lista, elmnt,      i)
     for (i in lista) {
         if (elmnt in lista[i]) {
             delete lista[i][elmnt];
+            RFUNC["quita"]  = 1;
             return i;
         }
     }
+    RFUNC["quita"]  = 0;
     return 0;
 }
 
@@ -450,6 +460,21 @@ function _copia(a, b, m, n,      i)
     }
 }
 
+##
+#
+# Añade un nuevo elemento a la lista jotasonizada o modifica el valor de uno 
+# ya existente.
+#
+# Argumentos:
+#   - lista = Lista multidimensional jotasonizada.
+#   - elmnt = Elemento para añadir/modificar en formato "a.b.c".
+#   - valor = Valor del nuevo elemento o nuevo valor para el elemento ya 
+#             existente.
+# Resultado:
+#   - Devuelve la posición del nuevo elemento la posición del que se haya
+#     modificado en caso de que existiese. 
+#
+##
 function pon(lista, elmnt, valor,      i, j, k, x, s, lst, mp)
 {
     gsub(/\./, SUBSEP, elmnt);
@@ -513,7 +538,7 @@ function pon(lista, elmnt, valor,      i, j, k, x, s, lst, mp)
     # 03.- Poner nuevo elemento al final.
     lista[i+1][elmnt][1] = valor;
     lista[i+1][elmnt][2] = x[1];
-    if (x[2] > 1)
+    if (x[2] > 1 && mp == 0)
         lista[i+1][elmnt][3] = 1;
     delete lst;
     return length(lista);
