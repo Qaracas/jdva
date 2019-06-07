@@ -78,7 +78,7 @@ Busca un elemento localizado dentro de una lista multidimensional jotasonizada y
     lista - Lista multidimensional jotasonizada.
     elmnt - Elemento a buscar en formato "a.b.c".
     
-**Resultado:***
+**Resultado:**
     - Si el elemento existe en la lista devuelve su valor y, ademas,
       pone RFUNC["trae"] a 1.
     - Si no existe el elemento devuelve "" y, además, pone RFUNC["trae"] a 0.
