@@ -543,3 +543,76 @@ function pon(lista, elmnt, valor,      i, j, k, x, s, lst, mp)
     delete lst;
     return length(lista);
 }
+
+function sangra(json,      x, c, d, i, t, tope)
+{
+    if (!isarray(json)) {
+        _perror("El primer argumento debe ser un puntero");
+    }
+    
+    c = d = tope = "";
+    i = t = 1; t_max = 100;
+    x["{"] = x["}"] = x["["] = x["]"] = x["\042"] = 0;
+    
+    while ((c = substr(json[0], i++, 1)) != "") {
+        if (c ~ /[ \t]/ && (x["\042"] % 2 == 0))
+            continue;
+        
+        switch (c) {
+        case "{":
+            x["{"]++;
+            tope = tope c "\n" _blancos(x);
+            break;
+        case "}":
+            x["}"]++;
+            if (d == "{") {
+                gsub(/\n[ ]*$/, "", tope);
+                tope = tope c;
+            } else 
+                tope = tope "\n" _blancos(x) c;
+            break;
+        case "[":
+            x["["]++;
+            tope = tope c "\n" _blancos(x);
+            break;
+        case "]":
+            x["]"]++;
+            if (d == "[") {
+                gsub(/\n[ ]*$/, "", tope);
+                tope = tope c;
+            } else 
+                tope = tope "\n" _blancos(x) c;
+            break;
+        case "\042":
+            x["\042"]++;
+            tope = tope c;
+            break;
+        case ",":
+            tope = tope c "\n" _blancos(x);
+            break;
+        case ":":
+            tope = tope c " ";
+            break;
+        default:
+            tope = tope c;
+            break;
+        }
+        d = c;
+        if (++t > t_max) {
+            printf "%s", tope;
+            tope = "";
+            t = 1;
+        }
+    }
+    if (t <= t_max)
+        printf "%s", tope;
+    print;
+}
+
+function _blancos(x,      i, b)
+{
+    b = "";
+    for (i = 0; i < ((x["{"] - x["}"]) + (x["["] - x["]"])); i++)
+        b = b "    ";
+    return b;
+}
