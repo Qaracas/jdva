@@ -33,7 +33,7 @@ BEGIN {
 function usar()
 {
     printf "%s\n\n%s\n%s\n",
-    "usar: trae_elemento_lista [--ayuda] <../pruebas/ejemplo_XX.json> <nombre>",
+    "Usar: trae_elemento_lista [--ayuda] <../pruebas/ejemplo_XX.json> <nombre>",
     "Pinta por pantalla el valor del elemento <nombre>, localizado en el texto",
     "en formato JSON contenido dentro del fichero que se le pasa como argumento.";
     exit -1;

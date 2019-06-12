@@ -26,7 +26,7 @@ BEGIN {
 function usar()
 {
     printf "%s\n\n%s\n%s\n%s\n",
-    "usar: pinta_lista [--ayuda] <../pruebas/ejemplo_XX.json>",
+    "Usar: pinta_lista [--ayuda] <../pruebas/ejemplo_XX.json>",
     "Pinta por pantalla la representación de una lista multidimensional",
     "jotasonizada, creada a partir de un texto en formato JSON contenido",
     "dentro del fichero que se le pasa como argumento.";

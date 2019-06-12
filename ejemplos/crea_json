@@ -11,6 +11,8 @@ BEGIN {
     pon(lista, "domicilio.autonomía", "Comunidad de Madrid");
     pon(lista, "domicilio.provincia", "Madrid");
     pon(lista, "domicilio.población", "Madrid");
+    pon(lista, "domicilio.localización.1", 10.11);
+    pon(lista, "domicilio.localización.2", 10.22);
     pon(lista, "domicilio.dirección.tipo", "Calle");
     pon(lista, "domicilio.dirección.calle", "Jacometrezo");
     pon(lista, "domicilio.dirección.número", 32);
@@ -23,7 +25,7 @@ BEGIN {
         
     lstmJson(lista, cad_json);
     
-    print cad_json[0];
+    sangra(cad_json);
     
     exit 0;
 }
@@ -31,7 +33,7 @@ BEGIN {
 function usar()
 {
     printf "%s\n\n%s\n%s\n\n",
-    "usar: crea_json [--ayuda]",
+    "Usar: crea_json [--ayuda]",
     "Pinta por pantalla un texto en formato JSON, creado a partir de la", 
     "siguiente lista multidimensional:";
     
