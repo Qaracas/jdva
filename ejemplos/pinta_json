@@ -1,0 +1,31 @@
+#!/usr/bin/gawk -E
+
+@include "../src/ecma-404.awk"
+
+BEGIN {
+    if (ARGC == 1 || 
+        ARGC > 2 || 
+        ARGV[1] == "--ayuda" ||
+        ARGV[1] !~ /^\.\.\/pruebas\/ejemplo_[0-9]{2}\.json$/)
+        usar();
+        
+    cad_json[0] = "";
+    linea = "";
+
+    while ((getline linea < ARGV[1]) > 0)
+        cad_json[0] = cad_json[0] linea;
+    close(ARGV[1]);
+    
+    sangra(cad_json);
+   
+    exit 0;
+}
+
+function usar()
+{
+    printf "%s\n\n%s\n%s\n",
+    "Usar: pinta_json [--ayuda] <../pruebas/ejemplo_XX.json>",
+    "Sangra cada línea del texto en formato JSON contenido dentro del fichero",
+    "que se le pasa como argumento, y luego pinta el resultado por pantalla.";
+    exit -1;
+}
