@@ -1,41 +1,57 @@
 # Sonak
 
-`Sonak` es una interfaz de programación escrita en [AWK](https://www.gnu.org/software/gawk/manual/gawk.html) que ofrece funciones para procesar y crear texto en formato [JSON](https://json.org/json-es.html).
+* Read this in other languages: [Español](LEEME.md).
 
-## Requisitos
+## What is `sonak`?
 
-* `GNU Awk 4.2.1, API: 2.0 (GNU MPFR 4.0.1, GNU MP 6.1.2)` o superior.
+`Sonak` is a programming interface written in [AWK](https://www.gnu.org/software/gawk/manual/gawk.html) that offers functions to process and create text in [JSON](https://json.org/index.html) format.
 
-Nota:
+## Software requirements
 
-Para que `sonak` funcione en Windows es necesario tener AWK instalado. [Git](https://git-scm.com/download/win) proporciona AWK.
+* `GNU Awk 4.2.1, API: 2.0 (GNU MPFR 4.0.1, GNU MP 6.1.2)` or higher.
 
-## Instalación
+Note:
 
-1. Descarga el proyecto completo escribiendo:
+For `sonak` to work in Windows it is necessary to have AWK installed. [Git](https://git-scm.com/download/win) provides AWK.
 
-        git clone git://github.com/Qaracas/sonak.git
+## Installation
 
-2. (Opcional) Ejecuta el programa de validación:
+1. Download the complete project writing:
 
-        cd [ruta sonak]/pruebas
-        ./verifica
+```bash
+$ git clone git://github.com/Qaracas/sonak.git
+```
 
-3. Copia el fichero `src/ecma-404.awk` dentro del directorio `/usr/local/share/awk`, o dentro de cualquier otro directorio listado en la variable de entorno AWKPATH.
+2. (Optional) Run the validation program:
 
-Para acceder a las funciones de la biblioteca `sonak` desde tu programa AWK, incluye el fichero `ecma-404.awk` al principio del todo.
+```bash
+$ cd [ruta sonak]/pruebas
+$ ./verifica
+```
 
-    @include "ecma-404.awk"
+3. Copy the `src/ecma-404.awk` file into the `/usr/local/share/awk` directory, or into any other directory listed in the [AWKPATH](https://www.gnu.org/software/gawk/manual/gawk.html#AWKPATH-Variable) environment variable.
 
-## Documentación
+To access the functions of the `sonak` library from your AWK program, include the` ecma-404.awk` file at the beginning.
 
-Consultar [LEEME.ejemplos.md](LEEME.ejemplos.md) para ver ejemplos de uso y lista de funciones de la interfaz.
+```awk
+#!/usr/bin/gawk -E
 
-## Autores
+@include "../src/ecma-404.awk"
 
-* Versión inicial - [Qaracas](https://github.com/Qaracas)
-* [Lista de contribuyentes](https://github.com/Qaracas/sonak/contributors)
+BEGIN {
+    ...
+}
+```
 
-## Licencia
+## Documentation
 
-Este proyecto se distribuye bajo los términos de la Licencia Pública General de GNU (GNU GPL v3.0). Mira el archivo [LICENSE](LICENSE) para más detalle.
+See [README.examples.md](README.examples.md) for examples of use and a list of interface functions.
+
+## Authors
+
+* Initial version - [Qaracas](https://github.com/Qaracas)
+* [List of contributors](https://github.com/Qaracas/sonak/contributors)
+
+## License
+
+This project is distributed under the terms of the GNU General Public License (GNU GPL v3.0). Look at the file [LICENSE](LICENSE) for more details.
