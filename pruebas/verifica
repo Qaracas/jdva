@@ -5,59 +5,102 @@
 BEGIN {
     LOG = "./resultado_pruebas.log";
     DFP = ".";
+    _RS = "";
     
     cad_json01[0];
     cad_json02[0];
-    json01 = "";
-    json02 = "";
     
     fdpj = "";
     
+    _ERROR = 0;
+    
     system("ls "DFP"/*.json > /tmp/vrfc.tmp")
-#    print "ls "DFP"/*.json" |& "sh";
-#    while (("sh" |& getline v) > 0)
+
     while ((getline fdpj < "/tmp/vrfc.tmp") > 0) {
+        _ERROR = 0;
         printf("Probando \042"fdpj"\042... ")
-        plog("Iniciando batería de pruebas con \042"fdpj"\042...\n",
-                1, "INFO");
         
         cad_json01[0] = "";
         while ((getline linea < fdpj) > 0)
             cad_json01[0] = cad_json01[0] linea;
         close(fdpj);
         
-        json01 = cad_json01[0];
+        ##### INI - PRUEBA01 #####
+        plog("Prueba01: iniciando con \042"fdpj"\042...\n",
+                1, "INFO");
         
-        plog("Convertir JSON_01 en lista_01... ", 1, "INFO");
+        plog("Prueba01: convertir JSON_01 en lista_01... ", 1, "INFO");
         jsonLstm(cad_json01, lista01);
         plog("Hecho.\n");
 
-        plog("Convertir lista_01 en JSON_02... ", 1, "INFO");
+        plog("Prueba01: convertir lista_01 en JSON_02... ", 1, "INFO");
         lstmJson(lista01, cad_json02);
         plog("Hecho.\n");
         
-        json02 = cad_json02[0];
+        plog("Prueba01: convertir JSON_02 en lista_02... ", 1, "INFO");
+        jsonLstm(cad_json02, lista02);
+        plog("Hecho.\n");
+                
+        if (compara(lista01, lista02) == 0) {
+            plog("Prueba01: con \042"fdpj"\042 superada.\n",
+                    1, "INFO");
+        } else {
+            _ERROR = 1;
+            plog("Prueba01: Lista_01 y 02 para \042"fdpj"\042 difieren.\n", 
+                    1, "ERROR");
+        }
+        ##### FIN - PRUEBA01 #####
         
-        plog("Convertir JSON_02 en lista_02... ", 1, "INFO");
+        ##### INI - PRUEBA02 #####
+        plog("Prueba02: iniciando con \042"fdpj"\042...\n",
+                1, "INFO");
+        
+        system("_PWD=$(pwd); \
+            cd ../ejemplos/; \
+            ./pinta_json ../pruebas/"substr(fdpj, 3, length(fdpj))\
+            " > /tmp/"substr(fdpj, 3, length(fdpj))"; \
+            cd \"${_PWD}\"");
+        
+        _RS = RS;
+        RS = "\r\n";
+        cad_json01[0] = "";
+        while ((getline linea < fdpj) > 0)
+            cad_json01[0] = cad_json01[0] linea;
+        close(fdpj);
+        RS = _RS;
+        
+        cad_json02[0] = "";
+        while ((getline linea < "/tmp/"substr(fdpj, 3, length(fdpj))) > 0)
+            cad_json02[0] = cad_json02[0] linea;
+        close("/tmp/"substr(fdpj, 3, length(fdpj)));
+        
+        plog("Prueba02: convertir JSON_01 en lista_01... ", 1, "INFO");
+        jsonLstm(cad_json01, lista01);
+        plog("Hecho.\n");
+        
+        plog("Prueba02: convertir JSON_02 en lista_02... ", 1, "INFO");
         jsonLstm(cad_json02, lista02);
         plog("Hecho.\n");
         
-    #    print json02; exit 0;
-
-    #    pinta_elmtos(lista01); 
-    #    print;
-    #    pinta_elmtos(lista02);
-    #    exit 0;
-        
         if (compara(lista01, lista02) == 0) {
-            plog("¡Bien! \042"fdpj"\042 ha superado todas las pruebas.\n", 
+            plog("Prueba02: con \042"fdpj"\042 superada.\n", 
                     1, "INFO");
-            print("Hecho.")
         } else {
-            print("Error (ver fichero de bitácora para más detalle).");
+            _ERROR = 1;
+            plog("Prueba02: Lista_01 y 02 para \042"fdpj"\042 difieren.\n", 
+                    1, "ERROR");
         }
+        
+        system("rm -f /tmp/"substr(fdpj, 3, length(fdpj)));
+        ##### FIN - PRUEBA02 #####
+        
+        if (_ERROR)
+            print("Error (ver bitácora para más detalle).");
+        else
+            print("Hecho.")
     }
     close("/tmp/vrfc.tmp");
+    system("rm -f /tmp/vrfc.tmp");
     exit 0;
 }
 
@@ -67,15 +110,15 @@ function compara(lista01, lista02)
         for (j in lista01[i]) {
             for (k in lista01[i][j]) {
                 if (!(i in lista02)) {
-                    plog("Falta "i" en lista_02.", 1, "ERROR");
+                    plog("Falta "i" en lista_02.\n", 1, "ERROR");
                     return -1;
                 }
                 if (!(j in lista02[i])) {
-                    plog("Falta "j" en lista_02["i"].", 1, "ERROR");
+                    plog("Falta "j" en lista_02["i"].\n", 1, "ERROR");
                     return -1;
                 }
                 if (!(k in lista02[i][j])) {
-                    plog("Falta "k" en lista_02["i"]["j"].", 1, "ERROR");
+                    plog("Falta "k" en lista_02["i"]["j"].\n", 1, "ERROR");
                     return -1;
                 }
                 plog("Compara ["i"]["j"]["k"] en listas 01 y 02... ", 
