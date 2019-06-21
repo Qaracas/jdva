@@ -462,6 +462,35 @@ function _copia(a, b, m, n,      i)
 
 ##
 #
+# Sustituye a typeof en GNU Awk < 4.2
+#
+# Ver función o_class() en:
+# https://github.com/cup/lake/blob/8ebe900/libo.awk#L5-L22
+#
+##
+function _typeof(obj,      q, x, z)
+{
+    q = CONVFMT; CONVFMT = "% g";
+
+    split(" " obj "\1" obj, x, "\1");
+
+    x[1] = obj == x[1];
+    x[2] = obj == x[2];
+    x[3] = obj == 0;
+    x[4] = obj "" == +obj;
+
+    CONVFMT = q;
+
+    z["0001"] = z["1101"] = z["1111"] = "number";
+    z["0100"] = z["0101"] = z["0111"] = "string";
+    z["1100"] = z["1110"] = "strnum";
+    z["0110"] = "undefined";
+
+    return z[x[1] x[2] x[3] x[4]];
+}
+
+##
+#
 # Añade un nuevo elemento a la lista jotasonizada o modifica el valor de uno 
 # ya existente.
 #
@@ -483,7 +512,7 @@ function pon(lista, elmnt, valor,      i, j, k, x, s, lst, mp)
     # Marca elemento anterior mismo padre
     mp = 0;
     # Tipo nuevo elemento
-    x[1] = ((typeof(valor) == "string") ? "s" : "n");
+    x[1] = ((_typeof(valor) == "string") ? "s" : "n");
     # Nivel nuevo elemento
     x[2] = split(elmnt, s, SUBSEP);
     # Nombre padre nuevo elemento
@@ -544,14 +573,14 @@ function pon(lista, elmnt, valor,      i, j, k, x, s, lst, mp)
     return length(lista);
 }
 
-function sangra(json,      x, c, d, i, t, tope)
+function sangra(json,      x, c, d, i, t, e, tope, elmt)
 {
     if (!isarray(json)) {
         _perror("El primer argumento debe ser un puntero");
     }
     
-    c = d = tope = "";
-    i = t = 1; t_max = 100;
+    c = d = tope = elmt = "";
+    i = t = 1; t_max = 100; e = 0;
     x["{"] = x["}"] = x["["] = x["]"] = x["\042"] = 0;
     
     while ((c = substr(json[0], i++, 1)) != "") {
@@ -560,43 +589,51 @@ function sangra(json,      x, c, d, i, t, tope)
         
         switch (c) {
         case "{":
-            x["{"]++;
-            tope = tope c "\n" _blancos(x);
+            x["{"]++; e = t = 1;
+            tope = tope c "\r\n" _blancos(x);
             break;
         case "}":
             x["}"]++;
-            if (d == "{") {
-                gsub(/\n[ ]*$/, "", tope);
-                tope = tope c;
+            if (d == "{" || e == 1) {
+                gsub(/\r\n[ ]*[^\r\n]*$/, "", tope);
+                gsub(/\042:\042/, "\042: \042", elmt);
+                tope = tope elmt c;
             } else 
-                tope = tope "\n" _blancos(x) c;
+                tope = tope "\r\n" _blancos(x) c;
+            e = 0;
             break;
         case "[":
-            x["["]++;
-            tope = tope c "\n" _blancos(x);
+            x["["]++; e = 1;
+            tope = tope c "\r\n" _blancos(x);
             break;
         case "]":
             x["]"]++;
-            if (d == "[") {
-                gsub(/\n[ ]*$/, "", tope);
-                tope = tope c;
-            } else 
-                tope = tope "\n" _blancos(x) c;
+            if (d == "[" || e == 1) {
+                gsub(/\r\n[ ]*[^\r\n]*$/, "", tope);
+                tope = tope elmt c;
+            } else
+                tope = tope "\r\n" _blancos(x) c;
+            e = 0;
             break;
         case "\042":
             x["\042"]++;
             tope = tope c;
             break;
         case ",":
-            tope = tope c "\n" _blancos(x);
+            if (e) e++;
+            tope = tope c "\r\n" _blancos(x);
             break;
         case ":":
-            tope = tope c " ";
+            tope = tope c ((x["\042"] % 2 == 0) ? " " : "");
             break;
         default:
             tope = tope c;
             break;
         }
+        if (e > 0 && c !~/[\[\{]/)
+            elmt = elmt c;
+        else
+            elmt = "";
         d = c;
         if (++t > t_max) {
             printf "%s", tope;
