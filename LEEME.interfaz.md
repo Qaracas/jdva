@@ -142,7 +142,8 @@ sangra
 
 **function sangra(json)**
 
-Pinta por pantalla el texto en formato JSON que se le pasa como argumento, sangrando líneas para facilitar su lectura.
+Pinta por pantalla el texto en formato JSON que se le pasa como argumento, sangrando líneas para facilitar
+su lectura.
 
 **Argumentos:**
     json  - Puntero a cadena de texto en formato JSON.
