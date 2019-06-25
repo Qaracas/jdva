@@ -81,14 +81,6 @@ BEGIN {
         jsonLstm(cad_json02, lista02);
         plog("Hecho.\n");
         
-#        if (fdpj == "/tmp/ejemplo_03.json") {
-#            print;
-#            pinta(lista01);
-#            print "-----------";
-#            pinta(lista02);
-#            exit 0;
-#        }
-        
         if (compara(lista01, lista02) == 0) {
             plog("Prueba02: con \042"fdpj"\042 superada.\n", 
                     1, "INFO");
