@@ -1,143 +1,6 @@
-# Documentación
+# Ejemplos de uso
 
-## Interfaz de programación
-
-<table>
-<tr>
-<th align="left">
-jsonLstm
-</th>
-</tr>
-<tr>
-<td>
-<pre>
-
-**function jsonLstm(json, lista)**
-
-Trasforma una cadena de texto en formato JSON en una lista multidimensional 
-(en adelante nombrada como lista jotasonizada).
-
-**Argumentos:**
-   json  - Puntero a cadena de texto en formato JSON.
-   lista - Lista multidimensional jotasonizada.
-</pre>
-</td>
-</tr>
-<tr>
-<th align="left">
-lstmJson
-</th>
-</tr>
-<tr>
-<td>
-<pre>
-
-**function lstmJson(lista, json)**
-
-Trasforma una lista multidimensional jotasonizada en una cadena de texto en formato JSON.
-
-**Argumentos:**
-    json  - Puntero a cadena de texto en formato JSON.
-    lista - Lista multidimensional jotasonizada.
-</pre>
-</td>
-</tr>
-<tr>
-<th align="left">
-pinta
-</th>
-</tr>
-<tr>
-<td>
-<pre>
-
-**function pinta(lista, frmt)**
-
-Pinta por pantalla una lista multidimensional
-
-**Argumentos:**
-    lista - Lista multidimensional jotasonizada.
-    frmt  - Formato de representación. Por ejemplo: "%s ,"
-</pre>
-</td>
-</tr>
-<tr>
-<th align="left">
-trae
-</th>
-</tr>
-<tr>
-<td>
-<pre>
-
-**function trae(lista, elmnt)**
-
-Busca un elemento localizado dentro de una lista multidimensional jotasonizada y devuelve su valor.
-
-**Argumentos:**
-    lista - Lista multidimensional jotasonizada.
-    elmnt - Elemento a buscar en formato "a.b.c".
-    
-**Resultado:**
-    - Si el elemento existe en la lista devuelve su valor y, ademas,
-      pone RFUNC["trae"] a 1.
-    - Si no existe el elemento devuelve "" y, además, pone RFUNC["trae"] a 0.
-</pre>
-</td>
-</tr>
-<tr>
-<th align="left">
-quita
-</th>
-</tr>
-<tr>
-<td>
-<pre>
-
-**function quita(lista, elmnt)**
-
-Elimina elementos de una lista multidimensional jasonizada.
-
-**Argumentos:**
-    lista - Lista multidimensional jotasonizada.
-    elmnt - Elemento a aliminar en formato "a.b.c".
-    
-**Resultado:**
-    - Si el elemento existe en la lista lo elimina y devuelve su posición.
-      Ademas, pone RFUNC["quita"] a 1.
-    - Si no existe el elemento devuelve 0 y, además, pone RFUNC["quita"] a 0.
-</pre>
-</td>
-</tr>
-<tr>
-<th align="left">
-pon
-</th>
-</tr>
-<tr>
-<td>
-<pre>
-
-**function pon(lista, elmnt, valor)**
-
-Añade un nuevo elemento a la lista jotasonizada o modifica el valor de uno ya existente.
-
-**Argumentos:**
-    lista - Lista multidimensional jotasonizada.
-    elmnt - Elemento para añadir/modificar en formato "a.b.c".
-    valor - Valor del nuevo elemento o nuevo valor para el elemento ya existente.
-
-**Resultado:**
-    - Devuelve la posición del nuevo elemento la posición del que se haya
-      modificado en caso de que existiese. 
-</pre>
-</td>
-</tr>
-</table> 
- 
-## Ejemplos de uso
-
-### Convertir JSON en lista multidimensional
+## Convertir JSON en lista multidimensional
 
 ```awk
 #!/usr/bin/gawk -E
@@ -176,7 +39,7 @@ Obtendríamos el resultado:
     [ciudad] = "Madrid"
     [datos][C.V.] = "Computación"
 
-### Eliminar elemento
+## Eliminar elemento
 
 ```awk
 jsonLstm(cad_json, lista);
@@ -190,7 +53,7 @@ Resultado:
     [ciudad] = "Madrid"
     [datos][C.V.] = "Computación"
 
-### Modificar/añadir elemento
+## Modificar/añadir elemento
 
 ```awk
 jsonLstm(cad_json, lista);
@@ -207,7 +70,7 @@ Resultado:
     [datos][C.V.] = "Computación"
     [apellidos] = "Blanco Crespo"
 
-### Traer elemento
+## Traer elemento
 
 ```awk
 jsonLstm(cad_json, lista);
@@ -218,7 +81,7 @@ Resultado:
 
     Pedro
 
-### Convertir lista multidimensional en JSON
+## Convertir lista multidimensional en JSON
 
 ```awk
 #!/usr/bin/gawk -E

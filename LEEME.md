@@ -6,7 +6,7 @@
 
 ## Requisitos
 
-* `GNU Awk 4.2.1, API: 2.0 (GNU MPFR 4.0.1, GNU MP 6.1.2)` o superior.
+* Alguna versión reciente de `GNU Awk`.
 
 Nota:
 
@@ -43,7 +43,7 @@ BEGIN {
 
 ## Documentación
 
-Consultar [LEEME.ejemplos.md](LEEME.ejemplos.md) para ver ejemplos de uso y una lista con las funciones de la interfaz.
+Consultar [LEEME.ejemplos.md](LEEME.ejemplos.md) para ver ejemplos de uso, y [LEEME.interfaz.md](LEEME.interfaz.md) para ver una lista con las funciones de la interfaz.
 
 ## Autores
 
