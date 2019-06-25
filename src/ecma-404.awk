@@ -132,7 +132,7 @@ function _nvl_cambia(nvl,      i, c)
 function jsonLstm(json, lista, id,     a, x, c, i, j, n)
 {
     if (!isarray(json)) {
-        _perror("El primer argumento debe ser un puntero");
+        _perror("El primer argumento debe ser un puntero.");
     }
     
     if (length(id) == 0) {
@@ -142,7 +142,10 @@ function jsonLstm(json, lista, id,     a, x, c, i, j, n)
     c = n = ""; a = i = j = 1;
     x["{"] = x["}"] = x["["] = x["]"] = 0;
     x["\042"] = x["sal"] = 0;
+    x["pc"] = substr(json[0], 1, 1);
 
+    # Ojo!! Aquí estamos modificando la cadena.
+    # La dejamos como estaba en ((1))
     _json_a_lst_elmtos(json);
     
     for (;;) {
@@ -195,6 +198,8 @@ function jsonLstm(json, lista, id,     a, x, c, i, j, n)
             break;
         }
     }
+    # ((1))
+    json[0] = x["pc"] json[0] ((x["pc"] == "{") ? "}" : "]");
 }
 
 ##
@@ -576,8 +581,11 @@ function pon(lista, elmnt, valor,      i, j, k, x, s, lst, mp)
 function sangra(json,      x, c, d, i, t, e, tope, elmt)
 {
     if (!isarray(json)) {
-        _perror("El primer argumento debe ser un puntero");
+        _perror("El primer argumento debe ser un puntero.");
     }
+    
+    if (RS !~ /^\r?\n$/)
+        _perror("Separador de línea incorrecto.");
     
     c = d = tope = elmt = "";
     i = t = 1; t_max = 100; e = 0;
@@ -590,29 +598,29 @@ function sangra(json,      x, c, d, i, t, e, tope, elmt)
         switch (c) {
         case "{":
             x["{"]++; e = t = 1;
-            tope = tope c "\r\n" _blancos(x);
+            tope = tope c RS _blancos(x);
             break;
         case "}":
             x["}"]++;
             if (d == "{" || e == 1) {
-                gsub(/\r\n[ ]*[^\r\n]*$/, "", tope);
+                gsub(/\r?\n[ ]*[^\r?\n]*$/, "", tope);
                 gsub(/\042:\042/, "\042: \042", elmt);
                 tope = tope elmt c;
             } else 
-                tope = tope "\r\n" _blancos(x) c;
+                tope = tope RS _blancos(x) c;
             e = 0;
             break;
         case "[":
             x["["]++; e = 1;
-            tope = tope c "\r\n" _blancos(x);
+            tope = tope c RS _blancos(x);
             break;
         case "]":
             x["]"]++;
             if (d == "[" || e == 1) {
-                gsub(/\r\n[ ]*[^\r\n]*$/, "", tope);
+                gsub(/\r?\n[ ]*[^\r?\n]*$/, "", tope);
                 tope = tope elmt c;
             } else
-                tope = tope "\r\n" _blancos(x) c;
+                tope = tope RS _blancos(x) c;
             e = 0;
             break;
         case "\042":
@@ -621,7 +629,7 @@ function sangra(json,      x, c, d, i, t, e, tope, elmt)
             break;
         case ",":
             if (e) e++;
-            tope = tope c "\r\n" _blancos(x);
+            tope = tope c ((x["\042"] % 2 == 0) ? RS _blancos(x) : "");
             break;
         case ":":
             tope = tope c ((x["\042"] % 2 == 0) ? " " : "");
