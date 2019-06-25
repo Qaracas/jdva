@@ -11,6 +11,7 @@ BEGIN {
     cad_json02[0];
     
     fdpj = "";
+    fdpk = "";
     
     _ERROR = 0;
     
@@ -61,18 +62,16 @@ BEGIN {
             " > /tmp/"substr(fdpj, 3, length(fdpj))"; \
             cd \"${_PWD}\"");
         
-        _RS = RS;
-        RS = "\r\n";
         cad_json01[0] = "";
         while ((getline linea < fdpj) > 0)
             cad_json01[0] = cad_json01[0] linea;
         close(fdpj);
-        RS = _RS;
         
+        fdpk = "/tmp/"substr(fdpj, 3, length(fdpj));
         cad_json02[0] = "";
-        while ((getline linea < "/tmp/"substr(fdpj, 3, length(fdpj))) > 0)
+        while ((getline linea < fdpk) > 0)
             cad_json02[0] = cad_json02[0] linea;
-        close("/tmp/"substr(fdpj, 3, length(fdpj)));
+        close(fdpk);
         
         plog("Prueba02: convertir JSON_01 en lista_01... ", 1, "INFO");
         jsonLstm(cad_json01, lista01);
@@ -81,6 +80,14 @@ BEGIN {
         plog("Prueba02: convertir JSON_02 en lista_02... ", 1, "INFO");
         jsonLstm(cad_json02, lista02);
         plog("Hecho.\n");
+        
+#        if (fdpj == "/tmp/ejemplo_03.json") {
+#            print;
+#            pinta(lista01);
+#            print "-----------";
+#            pinta(lista02);
+#            exit 0;
+#        }
         
         if (compara(lista01, lista02) == 0) {
             plog("Prueba02: con \042"fdpj"\042 superada.\n", 
@@ -115,6 +122,10 @@ function compara(lista01, lista02)
                 }
                 if (!(j in lista02[i])) {
                     plog("Falta "j" en lista_02["i"].\n", 1, "ERROR");
+                    return -1;
+                }
+                if (!(k in lista01[i][j])) {
+                    plog("Falta "k" en lista_01["i"]["j"].\n", 1, "ERROR");
                     return -1;
                 }
                 if (!(k in lista02[i][j])) {
