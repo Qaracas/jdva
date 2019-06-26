@@ -1,0 +1,6 @@
+{
+	"sondas":["ZA-01","ZB-01","ZB-02","ZB-03"],
+	"maximos":[5.612E+6,1.3774E+8,1.034E+9,2.992E+7],
+	"minimos":[1.25E-3,1.01E-3,1.2E-7,2.351E-3],
+	"ayuda":"Antes de colocar\nel sensor en el medio\nAsegúrese de verificar\nEl calibrado previo"
+}
