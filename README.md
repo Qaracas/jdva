@@ -8,7 +8,7 @@
 
 ## Software requirements
 
-* `GNU Awk 4.2.1, API: 2.0 (GNU MPFR 4.0.1, GNU MP 6.1.2)` or higher.
+* A recent version of AWK.
 
 Note:
 
