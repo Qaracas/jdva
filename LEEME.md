@@ -2,7 +2,7 @@
 
 ## ¿Qué es `sonak`?
 
-`Sonak` es una interfaz de programación escrita en [AWK](https://www.gnu.org/software/gawk/manual/gawk.html) que ofrece funciones para procesar y crear texto en formato [JSON](https://json.org/json-es.html).
+`Sonak` es una interfaz de programación escrita en [AWK](https://www.gnu.org/software/gawk/manual/gawk.html) que ofrece funciones para procesar y crear textos ajustados a la gramática [JSON](https://json.org/json-es.html).
 
 ## Requisitos
 
@@ -44,6 +44,13 @@ BEGIN {
 ## Documentación
 
 Consultar [LEEME.ejemplos.md](LEEME.ejemplos.md) para ver ejemplos de uso, y [LEEME.interfaz.md](LEEME.interfaz.md) para ver una lista con las funciones de la interfaz.
+
+## Referencias
+
+Esta librería pretende ser compatible con el formato de intercambio de datos JSON (JavaScript Object Notation) definido en:
+
+* [RFC 7159](https://tools.ietf.org/html/rfc7159)
+* [ECMA-404](http://www.ecma-international.org/publications/standards/Ecma-404.htm)
 
 ## Autores
 

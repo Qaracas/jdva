@@ -4,7 +4,7 @@
 
 ## What is `sonak`?
 
-`Sonak` is a programming interface written in [AWK](https://www.gnu.org/software/gawk/manual/gawk.html) that offers functions to process and create text in [JSON](https://json.org/index.html) format.
+`Sonak` is a programming interface written in [AWK](https://www.gnu.org/software/gawk/manual/gawk.html) that offers functions to parse and create texts conform to the [JSON](https://json.org/index.html) grammar.
 
 ## Software requirements
 
@@ -46,6 +46,14 @@ BEGIN {
 ## Documentation
 
 See [README.examples.md](README.examples.md) for examples of use and a list of interface functions.
+
+## References
+
+This library aims to conform with the JSON (JavaScript Object Notation) data exchange format defined in:
+
+* [RFC 7159](https://tools.ietf.org/html/rfc7159)
+* [ECMA-404](http://www.ecma-international.org/publications/standards/Ecma-404.htm)
+
 
 ## Authors
 
