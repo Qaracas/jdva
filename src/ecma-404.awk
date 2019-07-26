@@ -3,6 +3,10 @@ BEGIN {
     
     RFUNC["trae"]  = 0;
     RFUNC["quita"] = 0;
+    
+    _TRUE  = "_true_";
+    _FALSE = "_false_";
+    _NULL  = "_null_";
 }
 
 function _perror(txt)
@@ -397,17 +401,17 @@ function _pinta_sin_frmt(txt, idc, frmt,      k, s, d)
 #   - Si no existe el elemento devuelve "" y, además, pone RFUNC["trae"] a 0.
 #
 ##
-function trae(lista, elmnt)
+function trae(lista, elmnt,      i)
 {
     gsub(/\./, SUBSEP, elmnt);
     gsub(/\\./, ".", elmnt);
     for (i in lista) {
         if (elmnt in lista[i]) {
-            RFUNC["trae"]  = 1;
+            RFUNC["trae"] = 1;
             return lista[i][elmnt][1];
         }
     }
-    RFUNC["trae"]  = 0;
+    RFUNC["trae"] = 0;
     return "";
 }
 
@@ -475,6 +479,9 @@ function _copia(a, b, m, n,      i)
 ##
 function _typeof(obj,      q, x, z)
 {
+    if (obj == _TRUE || obj == _FALSE || obj == _NULL)
+        return "undefined";
+    
     q = CONVFMT; CONVFMT = "% g";
 
     split(" " obj "\1" obj, x, "\1");
@@ -496,11 +503,11 @@ function _typeof(obj,      q, x, z)
 
 ##
 #
-# Añade un nuevo elemento a la lista jotasonizada o modifica el valor de uno 
+# Añade un nuevo elemento a la lista MJ o modifica el valor de uno 
 # ya existente.
 #
 # Argumentos:
-#   - lista = Lista multidimensional jotasonizada.
+#   - lista = Lista multidimensional MJ.
 #   - elmnt = Elemento para añadir/modificar en formato "a.b.c".
 #   - valor = Valor del nuevo elemento o nuevo valor para el elemento ya 
 #             existente.
@@ -513,11 +520,15 @@ function pon(lista, elmnt, valor,      i, j, k, x, s, lst, mp)
 {
     gsub(/\./, SUBSEP, elmnt);
     gsub(/\\./, ".", elmnt);
-
+    
     # Marca elemento anterior mismo padre
     mp = 0;
     # Tipo nuevo elemento
     x[1] = ((_typeof(valor) == "string") ? "s" : "n");
+    
+    if (valor == _TRUE || valor == _FALSE || valor == _NULL)
+        gsub(/^_|_$/, "", valor);
+    
     # Nivel nuevo elemento
     x[2] = split(elmnt, s, SUBSEP);
     # Nombre padre nuevo elemento
@@ -604,7 +615,7 @@ function sangra(json,      x, c, d, i, t, e, tope, elmt)
             x["}"]++;
             if (d == "{" || e == 1) {
                 gsub(/\r?\n[ ]*[^\r?\n]*$/, "", tope);
-                gsub(/\042:\042/, "\042: \042", elmt);
+                gsub(/\042:/, "\042: ", elmt);
                 tope = tope elmt c;
             } else 
                 tope = tope RS _blancos(x) c;
@@ -650,8 +661,7 @@ function sangra(json,      x, c, d, i, t, e, tope, elmt)
         }
     }
     if (t <= t_max)
-        printf "%s", tope;
-    print;
+        printf "%s\n", tope;
 }
 
 function _blancos(x,      i, b)
