@@ -1,0 +1,132 @@
+#!/usr/bin/gawk -E
+
+@include "../src/ecma-404.awk"
+
+@include "servidor_http_utilidades.awk"
+@include "servidor_http_ctrl_especies.awk"
+@include "servidor_http_ctrl_máquinas.awk"
+
+BEGIN {
+    delete lcfg;
+    lee_config("./servidor_http.conf", lcfg);
+
+    _RS = RS;
+    CRLF = RS = "\r\n";
+
+    puerto = trae(lcfg, "general.puerto");
+    ServHttp = "/inet/tcp/" puerto "/0/0";
+
+    vrsnHttp = "HTTP/1.1";
+    codEstado = 200;
+    txtEstado = "OK";
+
+    cad_json[0] = "";
+
+    # Bloquear ejecución (espera hasta que un cliente conecte)
+    printf "" |& ServHttp;
+
+    for (;;) {
+        RS = CRLF;
+        ServHttp |& getline;
+        print systime(), strftime();
+        print $3, $1, $2;
+        proc_sol_http($1, $2, $3);
+
+        if (StdHttp["metodo"] != "GET") {
+            codEstado = 200;
+            txtEstado = "OK";
+            codEstado = 405;
+            txtEstado = "Method Not Allowed";
+        }
+
+        idc = 1;
+        for (;;) {
+            if ("/" trae(lcfg, "flujo." idc ".objeto") == StdHttp["objeto"] ||
+                trae(lcfg, "flujo." idc ".objeto") == "")
+                break;
+            idc++;
+        }
+
+        if (RFUNC["trae"] == 0) {
+            codEstado = 200;
+            txtEstado = "OK";
+            codEstado = 404;
+            txtEstado = "Not Found";
+        }
+
+        printf "%s %s %s", vrsnHttp, codEstado, txtEstado CRLF |& ServHttp;
+        printf "Connection: Close" CRLF                        |& ServHttp;
+        printf "Pragma: no-cache" CRLF                         |& ServHttp;
+        # Ver: https://www.ietf.org/rfc/rfc4627.txt
+        printf "Content-Type: application/json" CRLF           |& ServHttp;
+
+        if (StdHttp["objeto"] == "/favicon.ico" || codEstado != 200) {
+            codEstado = 200;
+            txtEstado = "OK";
+            close(ServHttp);
+            continue;
+        }
+
+        ## INI - Llamar controlador y hacer respuesta ##
+        RS = _RS;
+        control = trae(lcfg, "flujo." idc ".controlador");
+        if (!@control(CnltHttp, cad_json)) {
+            ldec = cnt_bytes(cad_json);
+            printf "%s", "Content-Length: " ldec CRLF CRLF     |& ServHttp;
+            printf "%s", cad_json[0]                           |& ServHttp;
+
+            RS = CRLF;
+            # Ignorar cabeceras enviadas por el cliente
+            while ((ServHttp |& getline) > 0)
+                ;
+            close(ServHttp);
+            continue;
+        }
+        ## FIN - Llamar controlador y hacer respuesta ##
+
+        ldec = cnt_bytes(cad_json);
+        lhex = sprintf("%x", ldec);
+        printf "Transfer-Encoding: chunked" CRLF CRLF          |& ServHttp;
+        printf lhex CRLF cad_json[0] CRLF 0 CRLF CRLF          |& ServHttp;
+
+        RS = CRLF;
+        # Ignorar cabeceras enviadas por el cliente
+        while ((ServHttp |& getline) > 0)
+            ;
+        close(ServHttp);
+    }
+}
+
+#
+# Procesar línea de solicitud HTTP 
+# Ver https://tools.ietf.org/html/rfc2616#section-5.1
+#
+function proc_sol_http(metodo, uri, version,      a, b, i, t)
+{
+    delete StdHttp; delete CnltHttp;
+    split(uri, a, "?");
+
+    StdHttp["metodo"]  = metodo;
+    StdHttp["objeto"]  = a[1];
+    StdHttp["version"] = version;
+
+    split(a[2], b, "&");
+
+    for (i in b) {
+        t = index(b[i], "=");
+        CnltHttp[substr(b[i], 1 , t - 1)] = \
+            substr(b[i], t + 1, length(b[i]) - t);
+    }
+}
+
+function lee_config(fichero_cfg, lst_cfg,      j, ln)
+{
+    j[0] = "";
+    ln = "";
+
+    while ((getline ln < fichero_cfg) > 0)
+        j[0] = j[0] ln;
+    close(fichero_cfg);
+
+    jsonLstm(j, lst_cfg); 
+}

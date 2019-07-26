@@ -1,0 +1,64 @@
+100360000000	"Boquilla alta presión 280 bar Inox. 1/4 chorro directo"	8	B	0.00%	8
+100360150000	"Boquilla alta presión 280 bar Inox. 1/4 abanico 15º"	8	B	0.00%	8
+100360250000	"Boquilla alta presión 280 bar Inox. 1/4 abanico 25º"	8	B	0.00%	8
+100360400000	"Boquilla alta presión 280 bar Inox. 1/4 abanico 40º"	8	B	0.00%	8
+100370000000	"Boquilla alta presión 350 bar Inox. 1/4 chorro directo"	13	B	0.00%	13
+100370150000	"Boquilla alta presión 350 bar Inox. 1/4 abanico 15º"	13	B	0.00%	13
+100370250000	"Boquilla alta presión 350 bar Inox. 1/4 abanico 25º"	13	B	0.00%	13
+100370400000	"Boquilla alta presión 350 bar Inox. 1/4 abanico 40º"	13	B	0.00%	13
+1001/8000000	"Boquilla alta presión 280 bar Inox. 1/8 chorro directo"	13	B	0.00%	13
+1001/8250000	"Boquilla alta presión 280 bar Inox. 1/8 abanico 25º"	13	B	0.00%	13
+1001/8400000	"Boquilla alta presión 280 bar Inox. 1/8 abanico 40º"	13	B	0.00%	13
+100160400300	"Cabezal ángulo variable 1,1mm.alta-baja presión 210bar.9L/m."	20	B	0.00%	20
+100160400200	"Cabezal ángulo variable 1,2mm.alta-baja presión 210bar.12L/m."	20	B	0.00%	20
+100160400400	"Cabezal ángulo variable 1,3mm.alta-baja presión 210bar.15L/m."	20	B	0.00%	20
+100004151200	"Cabezal ángulo variable 1,45mm.alta-baja presión 210bar.21L/m."	20	B	0.00%	20
+104077000000	Lanza prolongación acero zincado 40cm.	13	B	0.00%	13
+100090831100	Lanza acero zincado 70cm.	17	B	0.00%	17
+100090831200	Lanza acero zincado 90cm.	18	B	0.00%	18
+100090831300	Lanza acero zincado 120cm.	19	B	0.00%	19
+100090831400	Lanza acero zincado 150cm.	20	B	0.00%	20
+100090831500	Lanza acero zincado 170cm.	21	B	0.00%	21
+100090831600	Lanza acero zincado 200cm.	22	B	0.00%	22
+100090833100	Lanza doble acero zincado 106cm.	23	B	0.00%	23
+202002551000	Acero inoxidable 70cm	24	B	0.00%	24
+202002561000	Acero inoxidable 90cm	25	B	0.00%	25
+202002581000	Acero inoxidable 120cm	26	B	0.00%	26
+202002591000	Acero inoxidable 150cm	27	B	0.00%	27
+202002601000	Acero inoxidable 180cm	28	B	0.00%	28
+202002611000	Acero inoxidable 200cm	29	B	0.00%	29
+202004640000	Doble de acero inoxidable 110cm	30	B	0.00%	30
+302022021000	Acero inoxidable 70cm + portaboquilla regulable	31	B	0.00%	31
+KJTLW1800000	"Lanza-pistola telescópica en aluminio 200bar 21L/m 60ºC 5,5m"	32	B	0.00%	32
+905000000000	"Lanza-pistola telescópica en aluminio 275bar 30L/m 93ºC 5,5m"	33	B	0.00%	33
+905020000000	"Lanza-pistola telescópica en aluminio 275bar 30L/m 93ºC 7,3"	34	B	0.00%	34
+KHBLT0100000	Kit arnés cintura lanza telescópica para KHTLW18	35	B	0.00%	35
+905500000000	Kit arnés cintura lanza elescópica para 090500 y 090502	36	B	0.00%	36
+KRA120000000	Aspirador polvo-agua 220/240v.  1.000W.  12L.	82	A	0.00%	82
+KRA125000000	Aspirador polvo-agua 220/240v. 1.400W. 20L.	103	A	0.00%	103
+KRA22WATER00	Aspirador polvo-agua 220/240v. 1.400W 22L 	276	A	0.00%	276
+KRA31TLS0000	Aspirador polvo-agua 220/240v. 1.400W. 30L.Telecontrol/soplado	130	A	0.00%	130
+KRA51TLS0000	Aspirador polvo-agua 220/240v. 1.400W. 50L.Telecontrol/soplado	198	A	0.00%	198
+KRA124BAT000	"Aspirador polvo-agua a batería, 24V.DC. 550W. 21L."	"1,728.00"	A	0.00%	"1,728.00"
+KRA773000000	Aspirador polvo-agua 220/240v.  2.400W.  70L.	437	A	0.00%	437
+KRA775000000	Aspirador polvo-agua 220/240v.  3.600W.  80L.	492	A	0.00%	492
+KRA774000000	Aspirador polvo-agua 220/240v.  2.400W.  90L.	466	A	0.00%	466
+KRA776000000	Aspirador polvo-agua 220/240v.  3.600W.  90L.	522	A	0.00%	522
+KRA265MK0000	Aspirador polvo-agua 220/240v.  2.400W. 65L. Sacudidor M.	440	A	0.00%	440
+KRA365BS0000	Aspirador polvo-agua 220/240v.  3.600W. 65L. Sacudidor M.	534	A	0.00%	534
+KRAI375PA000	Aspirador industrial  1/230V. 3.600W. 76L.	"1,041.00"	A	0.00%	"1,041.00"
+KRAI375OIL00	Aspirador Oil industrial  1/230V. 3.600W. 76L. 	"1,254.00"	A	0.00%	"1,254.00"
+KRAI80M00000	Aspirador industrial 1/230V. 2.200W. 80L. 	"1,872.00"	A	0.00%	"1,872.00"
+KRAI80T00000	Aspirador industrial 3/400V. 3.000W. 80L.	"1,922.00"	A	0.00%	"1,922.00"
+KRAI202A0000	Aspirador industrial 1/230V. 2.300W. 20L. 	"1,590.00"	A	0.00%	"1,590.00"
+KRAI20200000	Aspirador industrial 3/400V. 1.800W. 20L.	"2,916.00"	A	0.00%	"2,916.00"
+KRAI202ATEX0	Aspirador industrial  1/230V. 1.800W. 20L.	"3,641.00"	A	0.00%	"3,641.00"
+KRAI37000000	Aspirador industrial  1/230V. 3.500W. 80L.	"1,728.00"	A	0.00%	"1,728.00"
+KRAI46000000	Aspirador industrial  3/400V. 3.000W. 80L.	"2,928.00"	A	0.00%	"2,928.00"
+KRAI802AIREX	Aspirador industrial neumático ATEX 80L.	"3,266.00"	A	0.00%	"3,266.00"
+KRAI50000000	Aspirador industrial  3/400V. 4.000W. 100L.	"5,352.00"	A	0.00%	"5,352.00"
+KRAI70000000	Aspirador industrial  3/400V. 5.500W. 100L.	"5,895.00"	A	0.00%	"5,895.00"
+KRAI400ATEX0	Aspirador industrial 3/400V. 4.000W. 100L.	"6,472.00"	A	0.00%	"6,472.00"
+KRAI450OIL00	Aspirador Oil industrial  1/230V. 3.450W. 100/40L.	"2,913.00"	A	0.00%	"2,913.00"
+KRAI100OIL00	Aspirador Oil industrial  3/400V. 3.000W. 100/40L.	"5,231.00"	A	0.00%	"5,231.00"
+KRAI200OIL00	Aspirador Oil industrial 3/400v. 3.000W. 200/40L	"6,713.00"	A	0.00%	"6,713.00"
