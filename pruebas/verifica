@@ -5,7 +5,6 @@
 BEGIN {
     LOG = "./resultado_pruebas.log";
     DFP = ".";
-    _RS = "";
     
     cad_json01[0];
     cad_json02[0];
