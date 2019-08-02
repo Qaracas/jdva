@@ -1,10 +1,10 @@
-# Sonak
+# The Vargas' JSON library (jdva)
 
 * Read this in other languages: [Español](LEEME.md).
 
-## What is `sonak`?
+## What is `jdva`?
 
-`Sonak` is a programming interface written in [AWK](https://www.gnu.org/software/gawk/manual/gawk.html) that offers functions to parse and create texts conform to the [JSON](https://json.org/index.html) grammar.
+`jdva` is a programming interface written in [AWK](https://www.gnu.org/software/gawk/manual/gawk.html) that offers functions to parse and create texts conform to the [JSON](https://json.org/index.html) grammar.
 
 ## Software requirements
 
@@ -12,26 +12,26 @@
 
 Note:
 
-For `sonak` to work in Windows it is necessary to have AWK installed. [Git](https://git-scm.com/download/win) provides AWK.
+For `jdva` to work in Windows it is necessary to have AWK installed. [Git](https://git-scm.com/download/win) provides AWK.
 
 ## Installation
 
 1. Download the complete project writing:
 
 ```bash
-$ git clone git://github.com/Qaracas/sonak.git
+$ git clone git://github.com/Qaracas/jdva.git
 ```
 
 2. (Optional) Run the validation program:
 
 ```bash
-$ cd [ruta sonak]/pruebas
+$ cd [ruta jdva]/pruebas
 $ ./verifica
 ```
 
 3. Copy the `src/ecma-404.awk` file into the `/usr/local/share/awk` directory, or into any other directory listed in the [AWKPATH](https://www.gnu.org/software/gawk/manual/gawk.html#AWKPATH-Variable) environment variable.
 
-To access the functions of the `sonak` library from your AWK program, include the` ecma-404.awk` file at the beginning.
+To access the functions of the `jdva` library from your AWK program, include the` ecma-404.awk` file at the beginning.
 
 ```awk
 #!/usr/bin/gawk -E
@@ -58,7 +58,7 @@ This library aims to conform with the JSON (JavaScript Object Notation) data exc
 ## Authors
 
 * Initial version - [Qaracas](https://github.com/Qaracas)
-* [List of contributors](https://github.com/Qaracas/sonak/contributors)
+* [List of contributors](https://github.com/Qaracas/jdva/contributors)
 
 ## License
 

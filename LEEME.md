@@ -1,8 +1,8 @@
-# Sonak
+# La biblioteca JSON de Vargas (jdva)
 
-## ¿Qué es `sonak`?
+## ¿Qué es `jdva`?
 
-`Sonak` es una interfaz de programación escrita en [AWK](https://www.gnu.org/software/gawk/manual/gawk.html) que ofrece funciones para procesar y crear textos ajustados a la gramática [JSON](https://json.org/json-es.html).
+`jdva` es una interfaz de programación escrita en [AWK](https://www.gnu.org/software/gawk/manual/gawk.html) que ofrece funciones para procesar y crear textos ajustados a la gramática [JSON](https://json.org/json-es.html).
 
 ## Requisitos
 
@@ -10,26 +10,26 @@
 
 Nota:
 
-Para que `sonak` funcione en Windows es necesario tener AWK instalado. [Git](https://git-scm.com/download/win) proporciona AWK.
+Para que `jdva` funcione en Windows es necesario tener AWK instalado. [Git](https://git-scm.com/download/win) proporciona AWK.
 
 ## Instalación
 
 1. Descarga el proyecto completo escribiendo:
 
 ```bash
-$ git clone git://github.com/Qaracas/sonak.git
+$ git clone git://github.com/Qaracas/jdva.git
 ```
 
 2. (Opcional) Ejecuta el programa de validación:
 
 ```bash
-$ cd [ruta sonak]/pruebas
+$ cd [ruta jdva]/pruebas
 $ ./verifica
 ```
 
 3. Copia el fichero `src/ecma-404.awk` dentro del directorio `/usr/local/share/awk`, o dentro de cualquier otro directorio listado en la variable de entorno [AWKPATH](https://www.gnu.org/software/gawk/manual/gawk.html#AWKPATH-Variable).
 
-Para acceder a las funciones de la biblioteca `sonak` desde tu programa AWK, incluye el fichero `ecma-404.awk` al principio del todo.
+Para acceder a las funciones de la biblioteca `jdva` desde tu programa AWK, incluye el fichero `ecma-404.awk` al principio del todo.
 
 ```awk
 #!/usr/bin/gawk -E
@@ -55,7 +55,7 @@ Esta librería pretende ser compatible con el formato de intercambio de datos JS
 ## Autores
 
 * Versión inicial - [Qaracas](https://github.com/Qaracas)
-* [Lista de contribuyentes](https://github.com/Qaracas/sonak/contributors)
+* [Lista de contribuyentes](https://github.com/Qaracas/jdva/contributors)
 
 ## Licencia
 
