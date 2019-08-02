@@ -1,12 +1,12 @@
 BEGIN {
     CNTSEC = 1;
-    
+
     RFUNC["trae"]  = 0;
     RFUNC["quita"] = 0;
-    
-    _TRUE  = "_true_";
-    _FALSE = "_false_";
-    _NULL  = "_null_";
+
+    TRUE  = "_true_";
+    FALSE = "_false_";
+    NULL  = "_null_";
 }
 
 function _perror(txt)
@@ -64,6 +64,20 @@ function _id(c, id)
         return c;
 }
 
+function _i2puntos(valor,      i, j)
+{
+    if (!(i = index(valor[0],"\042")))
+        return 0;
+    j = index(substr(valor[0],i + 1, length(valor[0]) - i), "\042");
+    if (!j)
+        return 0;
+    i = i + j;
+    j = index(substr(valor[0],i + 1, length(valor[0]) - i), ":");
+    if (j)
+        return i + j;
+    return 0;
+}
+
 ##
 #
 # Cada elemento de la lista es a su vez una lista de 3 elementos:
@@ -74,26 +88,23 @@ function _id(c, id)
 #       NULO = nada: elemento medio o final de lista u objeto
 #
 ##
-function _nuevo(lista, elem, valor, pos,      n, o, i)
+function _nuevo(lista, elem, valor, pos,      n, i)
 {
-    if (pos == 1) o = 1;
+    n = pos;
     # Si es un par "nombre : valor" modificar valor y pos
-    if (valor[0] ~ /[ \t]*\042[^\042]+\042[ \t]*:.+/) {
-        gsub(/\042[ \t]*:/, "\042:", valor[0]);
-        i = index(valor[0], "\042:");
-        pos = __trim(substr(valor[0], 1, i));
-        valor[0] = substr(valor[0], i + 2, (length(valor[0]) - i) + 1);
+    if ((i = _i2puntos(valor)) > 0) {
+        n = __trim(substr(valor[0], 1, i - 1));
+        valor[0] = substr(valor[0], i + 1, (length(valor[0]) - i) + 1);
     }
-    
-    n = _id(pos, elem);
-    if (o == 1)
+
+    n = _id(n, elem);
+    if (pos == 1)
         lista[CNTSEC][n][3] = 1;
 
-    lista[CNTSEC][n][2] = \
-        (valor[0] ~ /^[ \t]*\042[^\042]*\042[ \t]*$/) ? "s" : "n";
+    lista[CNTSEC][n][2] = (valor[0] ~ /^[ \t]*\042/) ? "s" : "n";
     _trim(valor, 0);
     lista[CNTSEC][n][1] = valor[0];
-    
+
     return n;
 }
 
@@ -133,12 +144,12 @@ function _nvl_cambia(nvl,      i, c)
 #   - lista = Colección con los elementos de la cadena JSON original.
 #
 ##
-function jsonLstm(json, lista, id,     a, x, c, i, j, n)
+function jsonLstm(json, lista, id,      a, x, c, i, j, n)
 {
     if (!isarray(json)) {
         _perror("El primer argumento debe ser un puntero.");
     }
-    
+
     if (length(id) == 0) {
         CNTSEC = 1;
         delete lista;
@@ -151,16 +162,16 @@ function jsonLstm(json, lista, id,     a, x, c, i, j, n)
     # Ojo!! Aquí estamos modificando la cadena.
     # La dejamos como estaba en ((1))
     _json_a_lst_elmtos(json);
-    
+
     for (;;) {
-		if ((c = substr(json[0], i++, 1)) == "") {
-		    if (x["sal"] >= 1)
+        if ((c = substr(json[0], i++, 1)) == "") {
+            if (x["sal"] >= 1)
                 break;
             else {
                 x["sal"]++;
                 c = ",";
             }
-		}
+        }
         switch (c) {
         case "{":
             x["{"]++;
@@ -479,7 +490,7 @@ function _copia(a, b, m, n,      i)
 ##
 function _typeof(obj,      q, x, z)
 {
-    if (obj == _TRUE || obj == _FALSE || obj == _NULL)
+    if (obj == TRUE || obj == FALSE || obj == NULL)
         return "undefined";
     
     q = CONVFMT; CONVFMT = "% g";
@@ -526,7 +537,7 @@ function pon(lista, elmnt, valor,      i, j, k, x, s, lst, mp)
     # Tipo nuevo elemento
     x[1] = ((_typeof(valor) == "string") ? "s" : "n");
     
-    if (valor == _TRUE || valor == _FALSE || valor == _NULL)
+    if (valor == TRUE || valor == FALSE || valor == NULL)
         gsub(/^_|_$/, "", valor);
     
     # Nivel nuevo elemento
