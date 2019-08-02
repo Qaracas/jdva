@@ -31,16 +31,16 @@ function busca_especie(cadena, c,      i, ln, bbdd)
 function crea_especie(c, cad_json,      i, lst, dr, regiones)
 {
     delete lst;
-    pon(lst, "hábito (sólo plantas)",  (c[4] == "" ? _NULL : c[4]));
-    pon(lst, "nombre.común",           (c[1] == "" ? _NULL : c[1]));
-    pon(lst, "nombre.científico",      (c[2] == "" ? _NULL : c[2]));
-    pon(lst, "nombre.sinonimia",       (c[3] == "" ? _NULL : c[3]));
-    pon(lst, "clasificación.reino",    (c[5] == "" ? _NULL : c[5]));
-    pon(lst, "clasificación.división", (c[6] == "" ? _NULL : c[6]));
-    pon(lst, "clasificación.clase",    (c[7] == "" ? _NULL : c[7]));
-    pon(lst, "clasificación.orden",    (c[8] == "" ? _NULL : c[8]));
-    pon(lst, "clasificación.familia",  (c[9] == "" ? _NULL : c[9]));
-    pon(lst, "distribución.código",    (c[10] == "" ? _NULL : c[10]));
+    pon(lst, "hábito (sólo plantas)",  (c[4] == "" ? NULL : c[4]));
+    pon(lst, "nombre.común",           (c[1] == "" ? NULL : c[1]));
+    pon(lst, "nombre.científico",      (c[2] == "" ? NULL : c[2]));
+    pon(lst, "nombre.sinonimia",       (c[3] == "" ? NULL : c[3]));
+    pon(lst, "clasificación.reino",    (c[5] == "" ? NULL : c[5]));
+    pon(lst, "clasificación.división", (c[6] == "" ? NULL : c[6]));
+    pon(lst, "clasificación.clase",    (c[7] == "" ? NULL : c[7]));
+    pon(lst, "clasificación.orden",    (c[8] == "" ? NULL : c[8]));
+    pon(lst, "clasificación.familia",  (c[9] == "" ? NULL : c[9]));
+    pon(lst, "distribución.código",    (c[10] == "" ? NULL : c[10]));
 
     regiones[1]  = "Arica y Parinacota";
     regiones[2]  = "Tarapacá";

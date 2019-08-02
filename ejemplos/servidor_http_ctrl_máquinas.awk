@@ -31,12 +31,12 @@ function busca_maquina(cadena, c,      i, ln, bbdd)
 function crea_maquina(c, cad_json,      lst)
 {
     delete lst;
-    pon(lst, "modelo",              (c[1] == "" ? _NULL : c[1]));
-    pon(lst, "descripción",         (c[2] == "" ? _NULL : c[2]));
-    pon(lst, "precio.I\\.V\\.A\\.", (c[3] == "" ? _NULL : c[3]));
-    pon(lst, "serie",               (c[3] == "" ? _NULL : c[4]));
-    pon(lst, "porcentaje",          (c[5] == "" ? _NULL : c[5]));
-    pon(lst, "precio.neto",         (c[6] == "" ? _NULL : c[6]));
+    pon(lst, "modelo",              (c[1] == "" ? NULL : c[1]));
+    pon(lst, "descripción",         (c[2] == "" ? NULL : c[2]));
+    pon(lst, "precio.I\\.V\\.A\\.", (c[3] == "" ? NULL : c[3]));
+    pon(lst, "serie",               (c[3] == "" ? NULL : c[4]));
+    pon(lst, "porcentaje",          (c[5] == "" ? NULL : c[5]));
+    pon(lst, "precio.neto",         (c[6] == "" ? NULL : c[6]));
 
     lstmJson(lst, cad_json);
 }
