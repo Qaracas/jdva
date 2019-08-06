@@ -1,16 +1,16 @@
 # Autor: Ulpiano Tur de Vargas <ulpiano.tur.devargas@gmail.com>
 #
-# Este programa es software libre; puedes distribuirlo y/o 
+# Este programa es software libre; puedes distribuirlo y/o
 # modificarlo bajo los términos de la Licencia Pública General de GNU
 # según la publicó la Fundación del Software Libre; ya sea la versión 3, o
 # (a su elección) una versión superior.
 #
 # Este programa se distribuye con la esperanza de que sea útil,
 # pero SIN NINGUNA GARANTIA; ni siquiera la garantía implícita de
-# COMERCIABILIDAD o APTITUD PARA UN PROPÓSITO DETERMINADO. Vea la 
+# COMERCIABILIDAD o APTITUD PARA UN PROPÓSITO DETERMINADO. Vea la
 # Licencia Pública General de GNU para más detalles.
 #
-# Deberías haber recibido una copia de la Licencia Pública General 
+# Deberías haber recibido una copia de la Licencia Pública General
 # de GNU junto con este software; mira el fichero LICENSE. Si
 # no, mira <https://www.gnu.org/licenses/>.
 
