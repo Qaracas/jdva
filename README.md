@@ -4,7 +4,7 @@
 
 ## What is `jdva`?
 
-`jdva` is a programming interface written in [AWK](https://www.gnu.org/software/gawk/manual/gawk.html) that offers functions to parse and create texts conform to the [JSON](https://json.org/index.html) grammar.
+`jdva` is an [AWK](https://www.gnu.org/software/gawk/manual/gawk.html) library that offers functions to parse and create texts conform to the [JSON](https://json.org/index.html) grammar.
 
 ## Software requirements
 
@@ -22,21 +22,33 @@ For `jdva` to work in Windows it is necessary to have AWK installed. [Git](https
 $ git clone git://github.com/Qaracas/jdva.git
 ```
 
-2. (Optional) Run the validation program:
+2. Go to new created directory:
+
+```bash
+$ cd jdva
+```
+
+3. (Opcional) Set [AWKPATH](https://www.gnu.org/software/gawk/manual/gawk.html#AWKPATH-Variable) environment variable:
+
+```bash
+$ export AWKPATH=${AWKPATH}:.:"$(pwd)""/src"
+```
+
+4. (Optional) Run the validation program:
 
 ```bash
 $ cd [ruta jdva]/pruebas
 $ ./verifica
 ```
 
-3. Copy the `src/ecma-404.awk` file into the `/usr/local/share/awk` directory, or into any other directory listed in the [AWKPATH](https://www.gnu.org/software/gawk/manual/gawk.html#AWKPATH-Variable) environment variable.
+5. Copy `src/bbl_jdva.awk` and `src/funcs_priv.awk` files into the `/usr/local/share/awk` directory, or into any other directory listed in [AWKPATH](https://www.gnu.org/software/gawk/manual/gawk.html#AWKPATH-Variable) environment variable.
 
-To access the functions of the `jdva` library from your AWK program, include the` ecma-404.awk` file at the beginning.
+To access functions of the `jdva` library from your AWK program, include the `bbl_jdva.awk` file at the beginning.
 
 ```awk
 #!/usr/bin/gawk -E
 
-@include "../src/ecma-404.awk"
+@include "bbl_jdva.awk"
 
 BEGIN {
     ...
