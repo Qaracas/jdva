@@ -36,7 +36,8 @@
 @include "bbl_pruebas.awk";
 
 BEGIN {
-    LOG = "../log/prueba_02.log";
+    dfdl = "../log/";
+    LOG = dfdl "prueba_02.log";
     fdpj = ARGV[1];
 
     split(fdpj, n, "/");
@@ -48,19 +49,20 @@ BEGIN {
 
     plog("Prueba02: iniciando con \042" nfpj "\042...\n", 1, "INFO");
 
-    system( \
-       "_PWD=$(pwd); cd ../../ejemplos/; \
-       ./pinta_json ../pruebas/djson/" nfpj \
-       " > /tmp/" nfpj ";" \
-       "cd \"${_PWD}\"" \
-       );
-
+    system("mkdir -p " dfdl);
+    system(                                     \
+        "_PWD=$(pwd); cd ../../ejemplos/;"      \
+        "./pinta_json ../pruebas/djson/" nfpj   \
+        " > ../pruebas/tmp/" nfpj ";"           \
+        "cd \"${_PWD}\""                        \
+        );
+    
     cad_json01[0] = "";
     while ((getline linea < fdpj) > 0)
         cad_json01[0] = cad_json01[0] linea;
     close(fdpj);
     
-    fdpk = "/tmp/" nfpj;
+    fdpk = "../tmp/" nfpj;
     cad_json02[0] = "";
     while ((getline linea < fdpk) > 0)
         cad_json02[0] = cad_json02[0] linea;

@@ -35,34 +35,37 @@
 BEGIN {
     dfjson = "./djson/";
     dfprbs = "./dprbs/";
-    lstjsn = "/tmp/lstjsn.tmp";
-    lstpbs = "/tmp/lstpbs.tmp";
+    dftmps = "./tmp/";
+    lstjsn = dftmps "lstjsn.tmp";
+    lstpbs = dftmps "lstpbs.tmp";
     fdpj = "";
     fdpp = "";
     nfpj = "";
     nfpp = "";
 
     codSal = 0;
-    
+
+    system("mkdir -p " dftmps);
+    system("echo $(pwd) > " dftmps "pwd.tmp");
     system("ls " dfjson "*.json > "   lstjsn);
     system("ls " dfprbs "prueba_* > " lstpbs);
-
+    
     while ((getline fdpp < lstpbs) > 0) {
         split(fdpp, n, "/");
         nfpp = n[length(n)];
 
+        printf("\n>>> Empezar \042" nfpp "\042 <<<\n");
         while ((getline fdpj < lstjsn) > 0) {
-                split(fdpj, n, "/");
-                nfpj = n[length(n)];
-            printf("Ejecutando \042" nfpp "\042 sobre " nfpj "... ");
-            codSal = system( \
-                        "_PWD=$(pwd); cd " dfprbs ";" \
-                        "./" nfpp " ." fdpj ";" \
-                        "cd \"${_PWD}\"" \
-                        );
-            if (codSal == 127) {
-                 print("Error de ejecución. Abortar.");
-                 exit 1;
+            split(fdpj, n, "/");
+            nfpj = n[length(n)];
+            printf("Hacer en \042" nfpj "\042... ");
+
+            codSal = system("cd " dfprbs "; ./" nfpp " ." fdpj);
+            system("cd $(cat " dftmps "pwd.tmp)");
+
+            if (codSal != 0 && codSal != 1) {
+                print("Error de ejecución. Abortar.");
+                exit 1;
             }
             if (codSal)
                 print("Error (ver bitácora para más detalle).");

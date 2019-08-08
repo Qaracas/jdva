@@ -36,7 +36,8 @@
 @include "bbl_pruebas.awk";
 
 BEGIN {
-    LOG = "../log/prueba_01.log";
+    dfdl = "../log/";
+    LOG  = dfdl "prueba_01.log";
     fdpj = ARGV[1];
 
     split(fdpj, n, "/");
@@ -46,6 +47,7 @@ BEGIN {
     cad_json01[0];
     cad_json02[0];
 
+    system("mkdir -p " dfdl);
     plog("Prueba01: iniciando con \042" nfpj "\042...\n", 1, "INFO");
 
     cad_json01[0] = "";
