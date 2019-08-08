@@ -1,0 +1,77 @@
+#!/usr/bin/gawk -E
+
+# Autor: Ulpiano Tur de Vargas <ulpiano.tur.devargas@gmail.com>
+#
+# Este programa es software libre; puedes distribuirlo y/o
+# modificarlo bajo los términos de la Licencia Pública General de GNU
+# según la publicó la Fundación del Software Libre; ya sea la versión 3, o
+# (a su elección) una versión superior.
+#
+# Este programa se distribuye con la esperanza de que sea útil,
+# pero SIN NINGUNA GARANTIA; ni siquiera la garantía implícita de
+# COMERCIABILIDAD o APTITUD PARA UN PROPÓSITO DETERMINADO. Vea la
+# Licencia Pública General de GNU para más detalles.
+#
+# Deberías haber recibido una copia de la Licencia Pública General
+# de GNU junto con este software; mira el fichero LICENSE. Si
+# no, mira <https://www.gnu.org/licenses/>.
+
+# Author: Ulpiano Tur de Vargas <ulpiano.tur.devargas@gmail.com>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 3, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public
+# License along with this software; see the file LICENSE. If
+# not, see <https://www.gnu.org/licenses/>.
+
+@include "bbl_jdva.awk";
+@include "bbl_pruebas.awk";
+
+BEGIN {
+    LOG = "../log/prueba_01.log";
+    fdpj = ARGV[1];
+
+    split(fdpj, n, "/");
+    nfpj = n[length(n)];
+    delete n;
+
+    cad_json01[0];
+    cad_json02[0];
+
+    plog("Prueba01: iniciando con \042" nfpj "\042...\n", 1, "INFO");
+
+    cad_json01[0] = "";
+    while ((getline linea < fdpj) > 0)
+        cad_json01[0] = cad_json01[0] linea;
+    close(fdpj);
+
+    plog("Prueba01: convertir JSON_01 en lista_01... ", 1, "INFO");
+    jsonLstm(cad_json01, lista01);
+    plog("Hecho.\n");
+
+    plog("Prueba01: convertir lista_01 en JSON_02... ", 1, "INFO");
+    lstmJson(lista01, cad_json02);
+    plog("Hecho.\n");
+
+    plog("Prueba01: convertir JSON_02 en lista_02... ", 1, "INFO");
+    jsonLstm(cad_json02, lista02);
+    plog("Hecho.\n");
+
+    if (compara(lista01, lista02) == 0) {
+        plog("Prueba01: con \042" nfpj "\042 superada.\n", 1, "INFO");
+    } else {
+        plog("Prueba01: Lista_01 y 02 para \042" nfpj "\042 difieren.\n",
+                1, "ERROR");
+        exit 1;
+    }
+
+    exit 0;
+}
