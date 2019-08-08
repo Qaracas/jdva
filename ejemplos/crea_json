@@ -32,7 +32,7 @@
 # License along with this software; see the file LICENSE. If
 # not, see <https://www.gnu.org/licenses/>.
 
-@include "bbl_jdva.awk"
+@include "bbl_jdva.awk";
 
 BEGIN {
     delete lista;

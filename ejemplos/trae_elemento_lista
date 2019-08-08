@@ -32,12 +32,11 @@
 # License along with this software; see the file LICENSE. If
 # not, see <https://www.gnu.org/licenses/>.
 
-@include "bbl_jdva.awk"
+@include "bbl_jdva.awk";
 
 BEGIN {
     if (ARGC != 3 ||
         ARGV[1] == "--ayuda" ||
-        ARGV[1] !~ /^\.\.\/pruebas\/ejemplo_[0-9]{2}\.json$/ ||
         ARGV[2] !~ /^[^\.]+(\.[^\.]+)*$/)
         usar();
 
@@ -65,7 +64,7 @@ BEGIN {
 function usar()
 {
     printf "%s\n\n%s\n%s\n",
-    "Usar: trae_elemento_lista [--ayuda] <../pruebas/ejemplo_XX.json> <nombre>",
+    "Usar: trae_elemento_lista [--ayuda] <../pruebas/djson/ejemplo_XX.json> <nombre>",
     "Pinta por pantalla el valor del elemento <nombre>, localizado en el texto",
     "en formato JSON contenido dentro del fichero que se le pasa como argumento.";
     exit -1;

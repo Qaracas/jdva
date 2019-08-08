@@ -30,7 +30,7 @@
 # License along with this software; see the file LICENSE. If
 # not, see <https://www.gnu.org/licenses/>.
 
-@include "funcs_priv.awk"
+@include "funcs_priv.awk";
 
 BEGIN {
     CNTSEC = 1;

@@ -32,11 +32,11 @@
 # License along with this software; see the file LICENSE. If
 # not, see <https://www.gnu.org/licenses/>.
 
-@include "bbl_jdva.awk"
+@include "bbl_jdva.awk";
 
-@include "servidor_http_utilidades.awk"
-@include "servidor_http_ctrl_especies.awk"
-@include "servidor_http_ctrl_máquinas.awk"
+@include "servidor_http_utilidades.awk";
+@include "servidor_http_ctrl_especies.awk";
+@include "servidor_http_ctrl_máquinas.awk";
 
 BEGIN {
     delete lcfg;
