@@ -32,155 +32,47 @@
 # License along with this software; see the file LICENSE. If
 # not, see <https://www.gnu.org/licenses/>.
 
-@include "bbl_jdva.awk"
-
 BEGIN {
-    LOG = "./resultado_pruebas.log";
-    DFP = ".";
-    
-    cad_json01[0];
-    cad_json02[0];
-    
+    dfjson = "./djson/";
+    dfprbs = "./dprbs/";
+    lstjsn = "/tmp/lstjsn.tmp";
+    lstpbs = "/tmp/lstpbs.tmp";
     fdpj = "";
-    fdpk = "";
+    fdpp = "";
+    nfpj = "";
+    nfpp = "";
+
+    codSal = 0;
     
-    _ERROR = 0;
-    
-    system("ls "DFP"/*.json > /tmp/vrfc.tmp")
+    system("ls " dfjson "*.json > "   lstjsn);
+    system("ls " dfprbs "prueba_* > " lstpbs);
 
-    while ((getline fdpj < "/tmp/vrfc.tmp") > 0) {
-        _ERROR = 0;
-        printf("Probando \042"fdpj"\042... ")
-        
-        cad_json01[0] = "";
-        while ((getline linea < fdpj) > 0)
-            cad_json01[0] = cad_json01[0] linea;
-        close(fdpj);
-        
-        ##### INI - PRUEBA01 #####
-        plog("Prueba01: iniciando con \042"fdpj"\042...\n",
-                1, "INFO");
-        
-        plog("Prueba01: convertir JSON_01 en lista_01... ", 1, "INFO");
-        jsonLstm(cad_json01, lista01);
-        plog("Hecho.\n");
+    while ((getline fdpp < lstpbs) > 0) {
+        split(fdpp, n, "/");
+        nfpp = n[length(n)];
 
-        plog("Prueba01: convertir lista_01 en JSON_02... ", 1, "INFO");
-        lstmJson(lista01, cad_json02);
-        plog("Hecho.\n");
-        
-        plog("Prueba01: convertir JSON_02 en lista_02... ", 1, "INFO");
-        jsonLstm(cad_json02, lista02);
-        plog("Hecho.\n");
-                
-        if (compara(lista01, lista02) == 0) {
-            plog("Prueba01: con \042"fdpj"\042 superada.\n",
-                    1, "INFO");
-        } else {
-            _ERROR = 1;
-            plog("Prueba01: Lista_01 y 02 para \042"fdpj"\042 difieren.\n", 
-                    1, "ERROR");
-        }
-        ##### FIN - PRUEBA01 #####
-        
-        ##### INI - PRUEBA02 #####
-        plog("Prueba02: iniciando con \042"fdpj"\042...\n",
-                1, "INFO");
-        
-        system("_PWD=$(pwd); \
-            cd ../ejemplos/; \
-            ./pinta_json ../pruebas/"substr(fdpj, 3, length(fdpj))\
-            " > /tmp/"substr(fdpj, 3, length(fdpj))"; \
-            cd \"${_PWD}\"");
-        
-        cad_json01[0] = "";
-        while ((getline linea < fdpj) > 0)
-            cad_json01[0] = cad_json01[0] linea;
-        close(fdpj);
-        
-        fdpk = "/tmp/"substr(fdpj, 3, length(fdpj));
-        cad_json02[0] = "";
-        while ((getline linea < fdpk) > 0)
-            cad_json02[0] = cad_json02[0] linea;
-        close(fdpk);
-        
-        plog("Prueba02: convertir JSON_01 en lista_01... ", 1, "INFO");
-        jsonLstm(cad_json01, lista01);
-        plog("Hecho.\n");
-        
-        plog("Prueba02: convertir JSON_02 en lista_02... ", 1, "INFO");
-        jsonLstm(cad_json02, lista02);
-        plog("Hecho.\n");
-        
-        if (compara(lista01, lista02) == 0) {
-            plog("Prueba02: con \042"fdpj"\042 superada.\n", 
-                    1, "INFO");
-        } else {
-            _ERROR = 1;
-            plog("Prueba02: Lista_01 y 02 para \042"fdpj"\042 difieren.\n", 
-                    1, "ERROR");
-        }
-        
-        system("rm -f /tmp/"substr(fdpj, 3, length(fdpj)));
-        ##### FIN - PRUEBA02 #####
-        
-        if (_ERROR)
-            print("Error (ver bitácora para más detalle).");
-        else
-            print("Hecho.")
-    }
-    close("/tmp/vrfc.tmp");
-    system("rm -f /tmp/vrfc.tmp");
-    exit 0;
-}
-
-function compara(lista01, lista02)
-{
-    for (i in lista01) {
-        for (j in lista01[i]) {
-            for (k in lista01[i][j]) {
-                if (!(i in lista02)) {
-                    plog("Falta "i" en lista_02.\n", 1, "ERROR");
-                    return -1;
-                }
-                if (!(j in lista02[i])) {
-                    plog("Falta "j" en lista_02["i"].\n", 1, "ERROR");
-                    return -1;
-                }
-                if (!(k in lista01[i][j])) {
-                    plog("Falta "k" en lista_01["i"]["j"].\n", 1, "ERROR");
-                    return -1;
-                }
-                if (!(k in lista02[i][j])) {
-                    plog("Falta "k" en lista_02["i"]["j"].\n", 1, "ERROR");
-                    return -1;
-                }
-                plog("Compara ["i"]["j"]["k"] en listas 01 y 02... ", 
-                        1, "INFO");
-                if (lista01[i][j][k] != lista02[i][j][k]) {
-                    plog("Error.\n");
-                    return -1;
-                }
-                plog("Hecho.\n");
+        while ((getline fdpj < lstjsn) > 0) {
+                split(fdpj, n, "/");
+                nfpj = n[length(n)];
+            printf("Ejecutando \042" nfpp "\042 sobre " nfpj "... ");
+            codSal = system( \
+                        "_PWD=$(pwd); cd " dfprbs ";" \
+                        "./" nfpp " ." fdpj ";" \
+                        "cd \"${_PWD}\"" \
+                        );
+            if (codSal == 127) {
+                 print("Error de ejecución. Abortar.");
+                 exit 1;
             }
+            if (codSal)
+                print("Error (ver bitácora para más detalle).");
+            else
+                print("Hecho.");
         }
+        close(lstjsn);
     }
-    return 0;
-}
-
-function plog(txt, stm, nvl)
-{
-    if (length(stm) == 0)
-        stm = "";
-    else
-        stm = fstm();
-    printf (((stm != "" && length(nvl) > 0) ? "%s %s - " : "") txt,
-                stm, nvl) >> LOG;
-}
-
-function fstm(frmt)
-{
-    if (length(frmt) == 0)
-        frmt = "%d/%m/%Y %H:%M:%S";
-    return strftime(frmt);
+    close(lstpbs);
+    system("rm -f " lstpbs);
+    system("rm -f " lstjsn);
+    exit 0;
 }
