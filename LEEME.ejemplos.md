@@ -5,7 +5,7 @@
 ```awk
 #!/usr/bin/gawk -E
 
-@include "ecma-404.awk"
+@include "bbl_jdva.awk"
 
 BEGIN {
     cad_json[0] = "";
@@ -86,7 +86,7 @@ Resultado:
 ```awk
 #!/usr/bin/gawk -E
 
-@include "../src/ecma-404.awk"
+@include "bbl_jdva.awk"
 
 BEGIN {
     cad_json[0] = "";
