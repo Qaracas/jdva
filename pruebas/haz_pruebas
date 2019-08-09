@@ -60,8 +60,8 @@ BEGIN {
             nfpj = n[length(n)];
             printf("Hacer en \042" nfpj "\042... ");
 
-            codSal = system("cd " dfprbs "; ./" nfpp " ." fdpj);
-            system("cd $(cat " dftmps "pwd.tmp)");
+            codSal = system("cd \"" dfprbs "\"; ./" nfpp " ." fdpj);
+            system("cd \"$(cat " dftmps "pwd.tmp)\"");
 
             if (codSal != 0 && codSal != 1) {
                 print("Error de ejecución. Abortar.");
