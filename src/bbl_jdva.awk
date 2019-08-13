@@ -80,6 +80,10 @@ function jsonLstm(json, lista, id,      a, x, c, i, j, n)
                 c = ",";
             }
         }
+        if (c == "\134") {
+            i++;
+            continue;
+        }
         switch (c) {
         case "{":
             x["{"]++;
