@@ -47,12 +47,12 @@ function _perror(txt)
 ##
 function _trim(str, idx)
 {
-    return gsub(/^[ \t]*(\042{1})*|(\042{1})*[ \t]*$/, "", str[idx]);
+    return gsub(/^[ \t]*\042?|\042?[ \t]*$/, "", str[idx]);
 }
 
 function __trim(str)
 {
-    gsub(/^[ \t]*(\042{1})*|(\042{1})*[ \t]*$/, "", str);
+    gsub(/^[ \t]*\042?|\042?[ \t]*$/, "", str);
     return str;
 }
 
