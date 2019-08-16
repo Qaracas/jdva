@@ -48,29 +48,29 @@ BEGIN {
     cad_json02[0];
 
     system("mkdir -p " dfdl);
-    plog("Prueba01: iniciando con \042" nfpj "\042...\n", 1, "INFO");
+    plog("Prueba01 ("nfpj"): Iniciando prueba...\n", 1, "INFO");
 
     cad_json01[0] = "";
     while ((getline linea < fdpj) > 0)
         cad_json01[0] = cad_json01[0] linea;
     close(fdpj);
 
-    plog("Prueba01: convertir JSON_01 en lista_01... ", 1, "INFO");
+    plog("Prueba01 ("nfpj"): convertir JSON_01 en lista_01... ", 1, "INFO");
     jsonLstm(cad_json01, lista01);
     plog("Hecho.\n");
 
-    plog("Prueba01: convertir lista_01 en JSON_02... ", 1, "INFO");
+    plog("Prueba01 ("nfpj"): Convertir lista_01 en JSON_02... ", 1, "INFO");
     lstmJson(lista01, cad_json02);
     plog("Hecho.\n");
 
-    plog("Prueba01: convertir JSON_02 en lista_02... ", 1, "INFO");
+    plog("Prueba01 ("nfpj"): Convertir JSON_02 en lista_02... ", 1, "INFO");
     jsonLstm(cad_json02, lista02);
     plog("Hecho.\n");
 
     if (compara(lista01, lista02) == 0) {
-        plog("Prueba01: con \042" nfpj "\042 superada.\n", 1, "INFO");
+        plog("Prueba01 ("nfpj"): Prueba superada.\n", 1, "INFO");
     } else {
-        plog("Prueba01: Lista_01 y 02 para \042" nfpj "\042 difieren.\n",
+        plog("Prueba01 ("nfpj"): Lista_01 y 02 difieren.\n",
                 1, "ERROR");
         exit 1;
     }

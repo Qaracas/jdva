@@ -49,7 +49,7 @@ BEGIN {
     system("echo $(pwd) > " dftmps "pwd.tmp");
     system("ls " dfjson "*.json > "   lstjsn);
     system("ls " dfprbs "prueba_* > " lstpbs);
-    
+
     while ((getline fdpp < lstpbs) > 0) {
         split(fdpp, n, "/");
         nfpp = n[length(n)];
@@ -58,7 +58,7 @@ BEGIN {
         while ((getline fdpj < lstjsn) > 0) {
             split(fdpj, n, "/");
             nfpj = n[length(n)];
-            printf("Hacer en \042" nfpj "\042... ");
+            printf("Hacer con \042" nfpj "\042... ");
 
             codSal = system("cd \"" dfprbs "\"; ./" nfpp " ." fdpj);
             system("cd \"$(cat " dftmps "pwd.tmp)\"");
@@ -68,14 +68,12 @@ BEGIN {
                 exit 1;
             }
             if (codSal)
-                print("Error (ver bitácora para más detalle).");
+                print("Error (ver log/" nfpp ".log).");
             else
                 print("Hecho.");
         }
         close(lstjsn);
     }
     close(lstpbs);
-    system("rm -f " lstpbs);
-    system("rm -f " lstjsn);
     exit 0;
 }

@@ -37,6 +37,8 @@
 
 BEGIN {
     dfdl = "../log/";
+    dtmp = "tmp/prueba_02/";    # Relativa
+
     LOG = dfdl "prueba_02.log";
     fdpj = ARGV[1];
 
@@ -47,13 +49,14 @@ BEGIN {
     cad_json01[0];
     cad_json02[0];
 
-    plog("Prueba02: iniciando con \042" nfpj "\042...\n", 1, "INFO");
+    plog("Prueba02 ("nfpj"): Iniciando prueba...\n", 1, "INFO");
 
     system("mkdir -p " dfdl);
+    system("mkdir -p ../" dtmp);
     system(                                     \
         "_PWD=$(pwd); cd ../../ejemplos/;"      \
         "./pinta_json ../pruebas/djson/" nfpj   \
-        " > ../pruebas/tmp/" nfpj ";"           \
+        " > ../pruebas/" dtmp nfpj ";"          \
         "cd \"${_PWD}\""                        \
         );
     
@@ -62,28 +65,27 @@ BEGIN {
         cad_json01[0] = cad_json01[0] linea;
     close(fdpj);
     
-    fdpk = "../tmp/" nfpj;
+    fdpk = "../" dtmp nfpj;
     cad_json02[0] = "";
     while ((getline linea < fdpk) > 0)
         cad_json02[0] = cad_json02[0] linea;
     close(fdpk);
 
-    plog("Prueba02: convertir JSON_01 en lista_01... ", 1, "INFO");
+    plog("Prueba02 ("nfpj"): Convertir JSON_01 en lista_01... ", 1, "INFO");
     jsonLstm(cad_json01, lista01);
     plog("Hecho.\n");
     
-    plog("Prueba02: convertir JSON_02 en lista_02... ", 1, "INFO");
+    plog("Prueba02 ("nfpj"): Convertir JSON_02 en lista_02... ", 1, "INFO");
     jsonLstm(cad_json02, lista02);
     plog("Hecho.\n");
 
     if (compara(lista01, lista02) == 0) {
-        plog("Prueba02: con \042" nfpj "\042 superada.\n", 1, "INFO");
+        plog("Prueba02 ("nfpj"): Prueba superada.\n", 1, "INFO");
     } else {
-        plog("Prueba02: Lista_01 y 02 para \042" nfpj "\042 difieren.\n",
+        plog("Prueba02 ("nfpj"): Lista_01 y 02 difieren.\n",
                 1, "ERROR");
         exit 1;
     }
 
-    system("rm -f " fdpk);
     exit 0;
 }
