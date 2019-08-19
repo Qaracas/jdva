@@ -1,6 +1,7 @@
 # Ejemplos de uso
 
-## Convertir JSON en lista multidimensional
+## Ejemplo 01
+Armar una lista multidimensional a partir de un texto JSON grabado en un fichero, y pintarla en pantalla.
 
 ```awk
 #!/usr/bin/gawk -E
@@ -21,18 +22,26 @@ BEGIN {
 }
 ```
 
-Si al programa anterior se le pasase como argumento la ruta al siguiente fichero JSON:
+Fichero de entrada:
 
-    {
-        "nombre":"Pedro",
-        "edad":42,
-        "ciudad":"Madrid",
-        "datos":{
-            "C.V.":"Computación"
-        }
+```json
+{
+    "nombre":"Pedro",
+    "edad":42,
+    "ciudad":"Madrid",
+    "datos":{
+        "C.V.":"Computación"
     }
+}
+```
 
-Obtendríamos el resultado:
+Acción:
+
+```bash
+$ ejemplo_01 entrada.json
+```
+
+Resultado:
 
     [nombre] = "Pedro"
     [edad] = 42
