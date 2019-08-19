@@ -3,9 +3,9 @@
 ## Ejemplo 01
 Armar una lista multidimensional a partir de un texto JSON grabado en un fichero, y pintarla en pantalla.
 
-```awk
-#!/usr/bin/gawk -E
+`ejemplo_01.awk`
 
+```awk
 @include "bbl_jdva.awk"
 
 BEGIN {
@@ -22,7 +22,7 @@ BEGIN {
 }
 ```
 
-Fichero de entrada:
+`entrada.json`
 
 ```json
 {
@@ -35,13 +35,9 @@ Fichero de entrada:
 }
 ```
 
-Acción:
-
 ```bash
-$ ejemplo_01 entrada.json
+$ awk -f ./ejemplo_01 entrada.json
 ```
-
-Resultado:
 
     [nombre] = "Pedro"
     [edad] = 42
