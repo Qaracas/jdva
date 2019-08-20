@@ -1,7 +1,7 @@
 # Ejemplos de uso
 
 ## Ejemplo 01
-Armar una lista multidimensional a partir de un texto JSON grabado en un fichero, y pintarla en pantalla.
+Armar una lista multidimensional a partir de un texto JSON, y luego pintarla por pantalla.
 
 `ejemplo_01.awk`
 
@@ -36,7 +36,7 @@ BEGIN {
 ```
 
 ```bash
-$ awk -f ./ejemplo_01 entrada.json
+$ awk -f ./ejemplo_01.awk entrada.json
 ```
 
     [nombre] = "Pedro"
@@ -44,30 +44,86 @@ $ awk -f ./ejemplo_01 entrada.json
     [ciudad] = "Madrid"
     [datos][C.V.] = "Computación"
 
-## Eliminar elemento
+## Ejemplo 02
+Armar una lista multidimensional a partir de un texto JSON, quiarle un elemento, y luego pintarla por pantalla.
 
 ```awk
-jsonLstm(cad_json, lista);
-quita(lista, "edad");
-pinta(lista);
+@include "bbl_jdva.awk"
+
+BEGIN {
+    cad_json[0] = "";
+    linea = "";
+
+    while ((getline linea < ARGV[1]) > 0)
+        cad_json[0] = cad_json[0] linea;
+    close(ARGV[1]);
+
+    jsonLstm(cad_json, lista);
+    quita(lista, "edad");
+
+    pinta(lista);
+}
 ```
 
-Resultado:
+`entrada.json`
+
+```json
+{
+    "nombre":"Pedro",
+    "edad":42,
+    "ciudad":"Madrid",
+    "datos":{
+        "C.V.":"Computación"
+    }
+}
+```
+
+```bash
+$ awk -f ./ejemplo_02.awk entrada.json
+```
 
     [nombre] = "Pedro"
     [ciudad] = "Madrid"
     [datos][C.V.] = "Computación"
 
-## Modificar/añadir elemento
+## Ejemplo 03
+Armar una lista multidimensional a partir de un texto JSON, modificar valor de uno de sus elementos, añadir otro nuevo, y luego pintarla por pantalla.
 
 ```awk
-jsonLstm(cad_json, lista);
-pon(lista, "apellidos", "Blanco Crespo");
-pon(lista, "edad", 17);
-pinta(lista);
+@include "bbl_jdva.awk"
+
+BEGIN {
+    cad_json[0] = "";
+    linea = "";
+
+    while ((getline linea < ARGV[1]) > 0)
+        cad_json[0] = cad_json[0] linea;
+    close(ARGV[1]);
+
+    jsonLstm(cad_json, lista);
+    pon(lista, "apellidos", "Blanco Crespo");
+    pon(lista, "edad", 17);
+
+    pinta(lista);
+}
 ```
 
-Resultado:
+`entrada.json`
+
+```json
+{
+    "nombre":"Pedro",
+    "edad":42,
+    "ciudad":"Madrid",
+    "datos":{
+        "C.V.":"Computación"
+    }
+}
+```
+
+```bash
+$ awk -f ./ejemplo_03.awk entrada.json
+```
 
     [nombre] = "Pedro"
     [edad] = 17
@@ -75,22 +131,49 @@ Resultado:
     [datos][C.V.] = "Computación"
     [apellidos] = "Blanco Crespo"
 
-## Traer elemento
+## Ejemplo 04
+Armar una lista multidimensional a partir de un texto JSON, y luego pintar por pantalla el valor de uno de sus elementos.
 
 ```awk
-jsonLstm(cad_json, lista);
-print trae(lista, "nombre");
+@include "bbl_jdva.awk"
+
+BEGIN {
+    cad_json[0] = "";
+    linea = "";
+
+    while ((getline linea < ARGV[1]) > 0)
+        cad_json[0] = cad_json[0] linea;
+    close(ARGV[1]);
+
+    jsonLstm(cad_json, lista);
+
+    print trae(lista, "nombre");
+}
 ```
 
-Resultado:
+`entrada.json`
+
+```json
+{
+    "nombre":"Pedro",
+    "edad":42,
+    "ciudad":"Madrid",
+    "datos":{
+        "C.V.":"Computación"
+    }
+}
+```
+
+```bash
+$ awk -f ./ejemplo_04.awk entrada.json
+```
 
     Pedro
 
-## Convertir lista multidimensional en JSON
+## Ejemplo 05
+Armar una lista multidimensional de cero, y luego pintarla por pantalla.
 
 ```awk
-#!/usr/bin/gawk -E
-
 @include "bbl_jdva.awk"
 
 BEGIN {
@@ -109,7 +192,9 @@ BEGIN {
 }
 ```
 
-Resultado:
+```bash
+$ awk -f ./ejemplo_05.awk
+```
 
     {
         "nombre":"Pedro",
