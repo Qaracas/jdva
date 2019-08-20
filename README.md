@@ -26,19 +26,21 @@ $ git clone git://github.com/Qaracas/jdva.git
 
 ```bash
 $ cd jdva
+(jdva) $
 ```
 
 3. (Opcional) Set [AWKPATH](https://www.gnu.org/software/gawk/manual/gawk.html#AWKPATH-Variable) environment variable:
 
 ```bash
-$ export AWKPATH=${AWKPATH}:.:"$(pwd)""/src"
+(jdva) $ export AWKPATH=${AWKPATH}:.:"$(pwd)""/src"
 ```
 
-4. (Optional) Run the validation program:
+4. (Optional) Run tests program:
 
 ```bash
-$ cd [ruta jdva]/pruebas
-$ ./verifica
+(jdva) $ cd pruebas
+(jdva/pruebas) $
+(jdva/pruebas) $ ./haz_pruebas
 ```
 
 5. Copy `src/bbl_jdva.awk` and `src/funcs_priv.awk` files into the `/usr/local/share/awk` directory, or into any other directory listed in [AWKPATH](https://www.gnu.org/software/gawk/manual/gawk.html#AWKPATH-Variable) environment variable.
@@ -51,7 +53,7 @@ To access functions of the `jdva` library from your AWK program, include the `bb
 @include "bbl_jdva.awk"
 
 BEGIN {
-    ...
+    #...
 }
 ```
 
