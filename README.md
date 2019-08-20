@@ -59,7 +59,9 @@ BEGIN {
 
 ## Documentation
 
-See [README.examples.md](README.examples.md) for examples and [README.interface.md](README.interface.md) for a complete list of library functions.
+See [README.tutorial.md](README.tutorial.md) for examples and [README.interface.md](README.interface.md) for a complete list of library functions.
+
+Take a look the [ejemplos](https://github.com/Qaracas/jdva/tree/master/ejemplos) (examples) folder as well.
 
 ## References
 

@@ -1,7 +1,9 @@
-# Ejemplos de uso
+# Tutorial
 
-## Ejemplo 01
-Armar una lista multidimensional a partir de un texto JSON, y luego pintarla por pantalla.
+Dive into the [ejemplos](https://github.com/Qaracas/jdva/tree/master/ejemplos) (examples) folder to see things that you can do with `jdva`.
+
+## Example 01
+Build a multidimensional list from an input JSON text and then print the result.
 
 `ejemplo_01.awk`
 
@@ -44,8 +46,8 @@ $ awk -f ./ejemplo_01.awk entrada.json
     [ciudad] = "Madrid"
     [datos][C.V.] = "Computación"
 
-## Ejemplo 02
-Armar una lista multidimensional a partir de un texto JSON, quiarle un elemento, y luego pintarla por pantalla.
+## Example 02
+Build a multidimensional list from an input JSON text, remove one element,  and then print the result.
 
 ```awk
 @include "bbl_jdva.awk"
@@ -86,8 +88,8 @@ $ awk -f ./ejemplo_02.awk entrada.json
     [ciudad] = "Madrid"
     [datos][C.V.] = "Computación"
 
-## Ejemplo 03
-Armar una lista multidimensional a partir de un texto JSON, modificar valor de uno de sus elementos, añadir otro nuevo, y luego pintarla por pantalla.
+## Example 03
+Build a multidimensional list from an input JSON text, modify one element, add new other one, and then print the result.
 
 ```awk
 @include "bbl_jdva.awk"
@@ -131,8 +133,8 @@ $ awk -f ./ejemplo_03.awk entrada.json
     [datos][C.V.] = "Computación"
     [apellidos] = "Blanco Crespo"
 
-## Ejemplo 04
-Armar una lista multidimensional a partir de un texto JSON, y luego pintar por pantalla el valor de uno de sus elementos.
+## Example 04
+Build a multidimensional list from an input JSON text, and then print the value of one of his element.
 
 ```awk
 @include "bbl_jdva.awk"
@@ -170,8 +172,8 @@ $ awk -f ./ejemplo_04.awk entrada.json
 
     Pedro
 
-## Ejemplo 05
-Armar una lista multidimensional de cero, y luego pintarla por pantalla.
+## Example 05
+Build a multidimensional list from scratch, turn it into JSON text, and then print the result.
 
 ```awk
 @include "bbl_jdva.awk"
@@ -196,12 +198,38 @@ BEGIN {
 $ awk -f ./ejemplo_05.awk
 ```
 
+    {"nombre":"Pedro","apellidos":"Blanco Crespo","edad":17,"ciudad":"Madrid","datos":{"C.V.":"Computación"}}
+
+## Example 06
+Build a multidimensional list from scratch, turn it into JSON text, and then print (pretty print) the formatted result.
+
+```awk
+@include "bbl_jdva.awk"
+
+BEGIN {
+    cad_json[0] = "";
+    
+    delete lista;
+    pon(lista, "nombre", "Pedro");
+    pon(lista, "apellidos", "Blanco Crespo");
+    pon(lista, "edad", 17);
+    pon(lista, "ciudad", "Madrid");
+    pon(lista, "datos.C\\.V\\.", "Computación");
+
+    lstmJson(lista, cad_json);
+
+    sangra(cad_json);
+}
+```
+
+```bash
+$ awk -f ./ejemplo_06.awk
+```
+
     {
-        "nombre":"Pedro",
-        "apellidos":"Blanco Crespo",
-        "edad":17,
-        "ciudad":"Madrid",
-        "datos":{
-            "C.V.":"Computación"
-        }
+        "nombre": "Pedro",
+        "apellidos": "Blanco Crespo",
+        "edad": 17,
+        "ciudad": "Madrid",
+        "datos": {"C.V.": "Computación"}
     }

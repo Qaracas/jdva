@@ -57,7 +57,9 @@ BEGIN {
 
 ## Documentación
 
-Ver ejemplos de uso en [LEEME.ejemplos.md](LEEME.ejemplos.md), y una lista con las funciones de la biblioteca en [LEEME.interfaz.md](LEEME.interfaz.md).
+Consultar la guía de aprendizaje en [LEEME.tutorial.md](LEEME.tutorial.md), y la lista de funciones de la biblioteca en [LEEME.interfaz.md](LEEME.interfaz.md).
+
+Echar también un ojo a los [ejemplos](https://github.com/Qaracas/jdva/tree/master/ejemplos).
 
 ## Referencias
 
