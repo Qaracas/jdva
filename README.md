@@ -59,7 +59,7 @@ BEGIN {
 
 ## Documentation
 
-See [README.examples.md](README.examples.md) for examples of use and a list of interface functions.
+See [README.examples.md](README.examples.md) for examples and [README.interface.md](README.interface.md) for a complete list of library functions.
 
 ## References
 
@@ -67,7 +67,6 @@ This library aims to conform with the JSON (JavaScript Object Notation) data exc
 
 * [RFC 7159](https://tools.ietf.org/html/rfc7159)
 * [ECMA-404](http://www.ecma-international.org/publications/standards/Ecma-404.htm)
-
 
 ## Authors
 

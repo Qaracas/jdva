@@ -51,13 +51,13 @@ Para acceder a las funciones de la biblioteca `jdva` desde tu programa AWK, incl
 @include "bbl_jdva.awk"
 
 BEGIN {
-    ...
+    #...
 }
 ```
 
 ## Documentación
 
-Consultar [LEEME.ejemplos.md](LEEME.ejemplos.md) para ver ejemplos de uso, y [LEEME.interfaz.md](LEEME.interfaz.md) para ver una lista con las funciones de la interfaz.
+Ver ejemplos de uso en [LEEME.ejemplos.md](LEEME.ejemplos.md), y una lista con las funciones de la biblioteca en [LEEME.interfaz.md](LEEME.interfaz.md).
 
 ## Referencias
 
