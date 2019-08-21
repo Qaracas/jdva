@@ -6,11 +6,33 @@ Crea una lista multidimensional partiendo de un texto en formato JSON.
 
 **Argumentos**
 
-* **json**  (1) Puntero a cadena de texto en formato JSON. Es decir, una lista de un sólo elemento cuyo índice sea 0.
+* **`json`** (1) Puntero a cadena de texto en formato JSON. Es decir, una lista de un sólo elemento cuyo índice sea 0.
 
-* **lista** El resultado de la conversión se almacena en `lista`.
+* **`lista`** El resultado de la conversión se almacena en lista.
 
-(1) Se ha decidido usar este truco para forzar que el argumento se pase por referencia, en lugar de por valor. En [AWK](https://www.gnu.org/software/gawk/manual/gawk.html) cualquier argumento, excepto las listas, se pasa por valor. 
+Ejemplo:
+
+```awk
+@include "bbl_jdva.awk"
+
+BEGIN {
+    cad_json[0] = "[{\"nombre\": \"alfa\",\"edad\": 34}, {\"nombre\": \"beta\", \"edad\": 36}]";
+
+    jsonLstm(cad_json, lista);
+
+    pinta(lista);
+}
+```
+
+```bash
+$ awk -f ./ejemplo_07.awk
+[1][nombre] = "alfa"
+[1][edad] = 34
+[2][nombre] = "beta"
+[2][edad] = 36
+```
+
+(1) Se ha decidido usar este _truco_ para forzar que el argumento se pase por referencia, en lugar de por valor. En [AWK](https://www.gnu.org/software/gawk/manual/gawk.html) cualquier argumento, excepto las listas, se pasa por valor. 
 
 ## lstmJson(lista, json)
 
