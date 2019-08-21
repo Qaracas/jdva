@@ -36,13 +36,44 @@ $ awk -f ./ejemplo_07.awk
 
 ## lstmJson(lista, json)
 
-Trasforma una lista MJ en una cadena de texto en formato JSON.
+Crear una cadena de texto en formato JSON partiendo de una lista multidimensional, generada previamente con la función **jsonLstm**.
 
 **Argumentos**
 
-* **json**  Puntero a cadena de texto en formato JSON.
+* **`lista`** Lista Multidimensional, generada previamente con la función **jsonLstm**.
 
-* **lista** Lista MJ.
+* **`json`**  Puntero a cadena de texto en formato JSON. Es decir, una lista de un sólo elemento cuyo índice sea 0.
+
+Ejemplo:
+
+```awk
+@include "bbl_jdva.awk"
+
+BEGIN {
+    json_ent[0] = "[{\"nombre\": \"alfa\",\"edad\": 34}, {\"nombre\": \"beta\", \"edad\": 36}]";
+    json_sal[0] = "";
+
+    jsonLstm(json_ent, lista);
+
+    lstmJson(lista, json_sal);
+
+    sangra(json_sal);
+}
+```
+
+```bash
+$ awk -f ./ejemplo.awk
+[
+    {
+        "nombre": "alfa",
+        "edad": 34
+    },
+    {
+        "nombre": "beta",
+        "edad": 36
+    }
+]
+```
 
 ## pinta(lista [, frmt])
 
