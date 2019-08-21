@@ -5,7 +5,9 @@
 Crea una lista multidimensional partiendo de un texto en formato JSON.
 
 `Argumentos`
+
 **json**  (1) Puntero a cadena de texto en formato JSON. Es decir, una lista de un sólo elemento cuyo índice sea 0.
+
 **lista** El resultado de la conversión se almacena en `lista`.
 
 (1) Se ha decidido usar este truco para forzar que el argumento se pase por referencia, en lugar de por valor. En [AWK](https://www.gnu.org/software/gawk/manual/gawk.html) cualquier argumento, excepto las listas, se pasa por valor. 
