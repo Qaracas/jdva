@@ -12,20 +12,13 @@ Crea una lista multidimensional partiendo de un texto en formato JSON.
 
 Ejemplo:
 
-```awk
-@include "bbl_jdva.awk"
-
-BEGIN {
-    cad_json[0] = "[{\"nombre\": \"alfa\",\"edad\": 34}, {\"nombre\": \"beta\", \"edad\": 36}]";
-
-    jsonLstm(cad_json, lista);
-
-    pinta(lista);
-}
-```
-
 ```bash
-$ awk -f ./ejemplo_07.awk
+$ echo "[{\"nombre\": \"alfa\",\"edad\": 34}, {\"nombre\": \"beta\", \"edad\": 36}]" |
+> gawk -i bbl_jdva.awk '{
+>   cad_json[0]=$0;
+>   jsonLstm(cad_json, lista);
+>   pinta(lista);
+> }'
 [1][nombre] = "alfa"
 [1][edad] = 34
 [2][nombre] = "beta"
@@ -46,23 +39,15 @@ Crear una cadena de texto en formato JSON partiendo de una lista multidimensiona
 
 Ejemplo:
 
-```awk
-@include "bbl_jdva.awk"
-
-BEGIN {
-    json_ent[0] = "[{\"nombre\": \"alfa\",\"edad\": 34}, {\"nombre\": \"beta\", \"edad\": 36}]";
-    json_sal[0] = "";
-
-    jsonLstm(json_ent, lista);
-
-    lstmJson(lista, json_sal);
-
-    sangra(json_sal);
-}
-```
-
 ```bash
-$ awk -f ./ejemplo.awk
+$ echo "[{\"nombre\": \"alfa\",\"edad\": 34}, {\"nombre\": \"beta\", \"edad\": 36}]" |
+> gawk -i bbl_jdva.awk '{
+>   json_ent[0] = $0;
+>   json_sal[0] = "";
+>   jsonLstm(json_ent, lista);
+>   lstmJson(lista, json_sal);
+>   sangra(json_sal);
+> }'
 [
     {
         "nombre": "alfa",
@@ -81,36 +66,64 @@ Pinta por pantalla una lista multidimensional
 
 **Argumentos**
 
-* **lista** Lista MJ.
+* **lista** Lista Multidimensional, generada previamente con la función **jsonLstm**.
 
-* **frmt**  Formato de representación. Por ejemplo: "%s\t"
+* **frmt**  Formato de representación. Por ejemplo: "%s\t".
+
+Ejemplo:
+
+```bash
+$ echo "[{\"nombre\": \"alfa\",\"edad\": 34}, {\"nombre\": \"beta\", \"edad\": 36}]" |
+> gawk -i bbl_jdva.awk '{
+>   cad_json[0]=$0;
+>   jsonLstm(cad_json, lista);
+>   pinta(lista, "%s\t");
+> }'
+alfa    34      beta    36
+```
 
 ## trae(lista, elmnt)
 
-Busca un elemento localizado dentro de una lista MJ y devuelve su valor.
+Devuelve el valor de un elemento localizado dentro de una lista multidimensional, partiendo de un filtro que lo identifica.
 
 **Argumentos**
 
-* **lista** Lista MJ.
-* **elmnt** Elemento a buscar en formato "a.b.c".
-    
+* **lista** Lista Multidimensional, generada previamente con la función **jsonLstm**.
+
+* **elmnt** Filtro que identifica al elemento dentro de la lista. Por ejemplo: "1.nombre".
+
 **Resultado**
 
-Si el elemento existe en la lista devuelve su valor y, ademas, pone RFUNC["trae"] a 1. Si no existe devuelve "" y, además, pone RFUNC["trae"] a 0.
+Si el elemento existe en la lista devuelve su valor y, ademas, pone RFUNC["trae"] a 1. Si no existe, devuelve una cadena vacía "" y, además, pone RFUNC["trae"] a 0.
+
+Ejemplo:
+
+```bash
+$ echo "[{\"nombre\": \"alfa\",\"edad\": 34}, {\"nombre\": \"beta\", \"edad\": 36}]" |
+> gawk -i bbl_jdva.awk '{
+>   cad_json[0]=$0;
+>   jsonLstm(cad_json, lista);
+>   print trae(lista, "2.edad");
+> }'
+36
+```
 
 ## function quita(lista, elmnt)
 
-Elimina elementos de una lista multidimensional jasonizada.
+Elimina elementos de una lista multidimensional que has sido generada previamente con la función **jsonLstm**.
 
 **Argumentos**
 
-* **lista** Lista MJ.
+* **lista** Lista Multidimensional, generada previamente con la función **jsonLstm**.
 
-* **elmnt** Elemento a aliminar en formato "a.b.c".
+* **elmnt** Filtro que identifica al elemento dentro de la lista. Por ejemplo: "2.edad".
 
 **Resultado**
 
-Si el elemento existe en la lista lo elimina y devuelve su posición. Ademas, pone RFUNC["quita"] a 1. Si no existe el elemento devuelve 0 y, además, pone RFUNC["quita"] a 0.
+Si el elemento existe en la lista, lo elimina y devuelve su posición. Ademas, pone RFUNC["quita"] a 1. Si no existe el elemento, devuelve 0. Además, pone RFUNC["quita"] a 0.
+
+```bash
+```
 
 ## function pon(lista, elmnt, valor)
 
