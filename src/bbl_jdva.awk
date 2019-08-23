@@ -335,19 +335,52 @@ function trae(lista, elmnt,      i)
 #   - Si no existe el elemento devuelve 0 y, además, pone RFUNC["quita"] a 0.
 #
 ##
-function quita(lista, elmnt,      i)
+function quita(lista, elmnt,      i, j, k, l, d, s, p, n)
 {
+    RFUNC["quita"] = 0;
     gsub(/\./, SUBSEP, elmnt);
     gsub(/\\./, ".", elmnt);
+
+    p = substr(elmnt, 1, _xedni(elmnt, SUBSEP));
+    s = strtonum(substr(elmnt, _xedni(elmnt, SUBSEP)+1));
+    n = index(elmnt, SUBSEP);
+
+    PROCINFO["sorted_in"] = "@ind_num_asc";
     for (i in lista) {
         if (elmnt in lista[i]) {
-            delete lista[i][elmnt];
-            RFUNC["quita"]  = 1;
-            return i;
+            if (3 in lista[i][elmnt]) {
+                if ((i+1) in lista)
+                    for (j in lista[i+1]) {
+                        lista[i+1][j][3] = 1;
+                        break;
+                    }
+            }
+            delete lista[i];
+            RFUNC["quita"] = 1;
+            d = i;
+            continue;
+        }
+        if (RFUNC["quita"]) {
+            for (j in lista[i]) {
+                if (s && substr(j, 1, _xedni(j, SUBSEP)) == p) {
+                    if (n)
+                        l = substr(j, 1, _xedni(j, SUBSEP)) s++;
+                    else
+                        l = s++;
+                } else {
+                    l = j;
+                }
+                for (k in lista[i][j])
+                    lista[i-1][l][k] = lista[i][j][k];
+            }
+            delete lista[i]
         }
     }
-    RFUNC["quita"]  = 0;
-    return 0;
+
+    if (RFUNC["quita"])
+        return d;
+    else
+        return 0;
 }
 
 ##

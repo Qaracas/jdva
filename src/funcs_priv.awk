@@ -99,6 +99,14 @@ function _i2puntos(valor,      i, j)
     return 0;
 }
 
+function _xedni(cadena, crt,      i)
+{
+    i = index(cadena, crt);
+    if (i)
+        i = i + _xedni(substr(cadena, i+1), crt);
+    return i
+}
+
 ##
 #
 # Cada elemento de la lista es a su vez una lista de 3 elementos:
@@ -149,19 +157,19 @@ function _nvl_cambia(nvl,      i, c)
         c = length(nvl[1]);
     else
         c = length(nvl[0]);
-    
+
     for (i = 1; i <= c; i++)
         if (nvl[0][i] != nvl[1][i])
             return i;
     return 0;
 }
 
-function _pinta_frmt(txt, idc, frmt,      k, s, d) 
+function _pinta_frmt(txt, idc, frmt,      k, s, d)
 {
     printf(frmt, txt[1]);
 }
 
-function _pinta_sin_frmt(txt, idc, frmt,      k, s, d) 
+function _pinta_sin_frmt(txt, idc, frmt,      k, s, d)
 {
     split(idc, s, SUBSEP);
     d = "";
@@ -170,21 +178,21 @@ function _pinta_sin_frmt(txt, idc, frmt,      k, s, d)
     if (txt[2] == "s")
         printf("%s = \042%s\042\n", d, txt[1]);
     else
-        printf("%s = %s\n", d, txt[1]);    
+        printf("%s = %s\n", d, txt[1]);
 }
 
 function _mismo_padre(a, b,      s1, s2, l1, l2)
 {
     l1 = split(a, s1, SUBSEP);
     l2 = split(b, s2, SUBSEP);
-    
+
     if (l1 < l2+1)
         return 0;
     
     for (i in s2)
         if (s1[i] != s2[i])
             return 0;
-    
+
     return 1;
 }
 
@@ -218,7 +226,7 @@ function _typeof(obj,      q, x, z)
 {
     if (obj == TRUE || obj == FALSE || obj == NULL)
         return "undefined";
-    
+
     q = CONVFMT; CONVFMT = "% g";
 
     split(" " obj "\1" obj, x, "\1");
