@@ -55,6 +55,12 @@ BEGIN {
 }
 ```
 
+O pásalo mediante la opción de línea de comandos _incluye archivo fuente_.
+
+```bash
+gawk -i bbl_jdva.awk '{#...}'
+```
+
 ## Documentación
 
 Consultar la guía de aprendizaje en [LEEME.tutorial.md](LEEME.tutorial.md), y la lista de funciones de la biblioteca en [LEEME.interfaz.md](LEEME.interfaz.md).
