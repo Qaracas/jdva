@@ -45,6 +45,8 @@ $ cd jdva
 
 5. Copy `src/bbl_jdva.awk` and `src/funcs_priv.awk` files into the `/usr/local/share/awk` directory, or into any other directory listed in [AWKPATH](https://www.gnu.org/software/gawk/manual/gawk.html#AWKPATH-Variable) environment variable.
 
+## Start using
+
 To access `jdva` library functions from your AWK program, include the `bbl_jdva.awk` file at the beginning.
 
 ```awk

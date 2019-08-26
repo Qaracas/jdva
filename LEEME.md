@@ -43,6 +43,8 @@ $ cd jdva
 
 5. Copiar los ficheros `src/bbl_jdva.awk` y `src/funcs_priv.awk` dentro del directorio `/usr/local/share/awk`, o dentro de cualquier otro directorio listado en la variable de entorno [AWKPATH](https://www.gnu.org/software/gawk/manual/gawk.html#AWKPATH-Variable).
 
+## Empezar a usar
+
 Para acceder a las funciones de la biblioteca `jdva` desde tu programa AWK, incluye el fichero `bbl_jdva.awk` al principio del todo.
 
 ```awk
