@@ -63,7 +63,7 @@ gawk -i bbl_jdva.awk '{#...}'
 
 ## Documentación
 
-Consultar la guía de aprendizaje en [LEEME.tutorial.md](LEEME.tutorial.md), y la lista de funciones de la biblioteca en [LEEME.interfaz.md](LEEME.interfaz.md).
+Consultar la guía de aprendizaje en [LEEME.tutorial.md](LEEME.tutorial.md), y la lista de funciones de la biblioteca en [LEEME.funciones.md](LEEME.funciones.md).
 
 Echar también un ojo a los [ejemplos](https://github.com/Qaracas/jdva/tree/master/ejemplos).
 

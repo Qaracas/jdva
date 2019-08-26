@@ -65,7 +65,7 @@ gawk -i bbl_jdva.awk '{#...}'
 
 ## Documentation
 
-See [README.tutorial.md](README.tutorial.md) for examples and [README.interface.md](README.interface.md) for a complete list of library functions.
+See [README.tutorial.md](README.tutorial.md) for examples and [README.functions.md](README.functions.md) for a complete list of library functions.
 
 Take a look the [ejemplos](https://github.com/Qaracas/jdva/tree/master/ejemplos) (examples) folder as well.
 
