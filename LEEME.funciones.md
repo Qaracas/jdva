@@ -6,9 +6,9 @@ Crea una lista multidimensional partiendo de un texto en formato JSON.
 
 **Argumentos**
 
-* **json** (1) Puntero a cadena de texto en formato JSON. Es decir, una lista de un sólo elemento cuyo índice sea 0.
+* **json** (1) Puntero a una cadena de texto en formato JSON. Es decir, una lista unidimensional de un sólo elemento cuyo índice es 0, y su valor es una cadena de texto JSON.
 
-* **lista** El resultado de la conversión se almacena en lista.
+* **lista** Lista multidimensional donde la función `jsonLstm` almacena los valores, y la estructura, del texto en formato JSON de entrada.
 
 Ejemplo:
 
@@ -25,17 +25,17 @@ $ echo "[{\"nombre\": \"alfa\",\"edad\": 34}, {\"nombre\": \"beta\", \"edad\": 3
 [2][edad] = 36
 ```
 
-(1) Se ha decidido usar este _truco_ para forzar que el argumento se pase por referencia, en lugar de por valor. En [AWK](https://www.gnu.org/software/gawk/manual/gawk.html) cualquier argumento, excepto las listas, se pasa por valor. 
+(1) Se ha decidido usar este _truco_ para forzar que el argumento se pase por referencia, en lugar de por valor. Excepto las listas, en [AWK](https://www.gnu.org/software/gawk/manual/gawk.html), cualquier argumento se pasa por valor. 
 
 ## lstmJson(lista, json)
 
-Crear una cadena de texto en formato JSON partiendo de una lista multidimensional, generada previamente con la función `jsonLstm`.
+Obtener una cadena de texto en formato JSON, partiendo de una lista multidimensional previamente creada con la función `jsonLstm`.
 
 **Argumentos**
 
 * **lista** Lista Multidimensional, generada previamente con la función `jsonLstm`.
 
-* **json** Puntero a cadena de texto en formato JSON. Es decir, una lista de un sólo elemento cuyo índice sea 0.
+* **json** Puntero a una cadena de texto en formato JSON. Es decir, una lista unidimensional de un sólo elemento cuyo índice es 0, y su valor es una cadena de texto JSON. Dicha cadena de texto en formato JSON, es creada por la función `lstmJson` conservando los valores, y la estructura, de la lista multidimensional tomada como primer argumento.
 
 Ejemplo:
 
@@ -62,13 +62,13 @@ $ echo "[{\"nombre\": \"alfa\",\"edad\": 34}, {\"nombre\": \"beta\", \"edad\": 3
 
 ## pinta(lista [, frmt])
 
-Pinta por pantalla el contenido y la estructura de una lista multidimensional
+Pinta por pantalla el contenido y la estructura de una lista multidimensional.
 
 **Argumentos**
 
 * **lista** Lista Multidimensional, generada previamente con la función `jsonLstm`.
 
-* **frmt**  Formato de representación. Por ejemplo: `"%s\t"`.
+* **frmt** Cadena textual de formato. Por ejemplo: `"%s\t"`.
 
 Ejemplo:
 
@@ -84,17 +84,17 @@ alfa    34      beta    36
 
 ## trae(lista, elmnt)
 
-Devuelve el valor de un elemento localizado dentro de una lista multidimensional, en función de un filtro que lo identifica.
+Devuelve el valor de un elemento localizado dentro de una lista multidimensional, generada previamente con la función `jsonLstm`, en función de un filtro que lo identifica.
 
 **Argumentos**
 
 * **lista** Lista Multidimensional, generada previamente con la función `jsonLstm`.
 
-* **elmnt** Filtro que identifica al elemento dentro de la lista. Por ejemplo: `"1.nombre"`.
+* **elmnt** Filtro que identifica un elemento dentro de una lista multidimensional con estructura JSON. Por ejemplo: `"1.nombre"`.
 
 **Resultado**
 
-Si el elemento existe en la lista devuelve su valor y, ademas, pone `RFUNC["trae"]` a 1. Si no existe, devuelve una cadena vacía "" y, además, pone `RFUNC["trae"]` a 0.
+Si el elemento existe en la lista `trae` devuelve su valor y, ademas, pone `RFUNC["trae"]` a 1. Si no existe, devuelve una cadena vacía `""` y, además, pone `RFUNC["trae"]` a 0.
 
 Ejemplo:
 
@@ -152,7 +152,7 @@ Añade un nuevo elemento a una lista multidimencional, o modifica el valor de un
 
 * **elmnt** Filtro que identifica al nuevo elemento de la lista. Por ejemplo: `"2.edad"`.
 
-* **valor** Valor del nuevo elemento, o nuevo valor, si el elemento identificado por el filtro ya existe en la lista.
+* **valor** Valor del nuevo elemento, o nuevo valor (si el elemento identificado por el filtro ya existe)
 
 **Resultado**
 
