@@ -183,7 +183,7 @@ $ gawk -i bbl_jdva.awk 'BEGIN{
 
 ## function sangra(json)
 
-Pretty print the JSON formatted string text passed as an argument.
+Pretty print the JSON formatted text string passed as an argument.
 
 **Arguments**
 
