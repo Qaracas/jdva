@@ -179,14 +179,14 @@ function lstmJson(lista, json,      i, j, k, z, s, n, x)
                 json[0] = json[0] ",";
                 for (k = _nvl_cambia(s); k <= n[1]; k++)
                     if (s[1][k] ~ /^[0-9]+$/)
-                        json[0] = json[0] \
+                        json[0] = json[0]                      \
                             ((s[1][k]+0 == 1) ? "[" : "");
                     else
-                        json[0] = json[0] \
-                                ((k > _nvl_cambia(s) && \
-                                  (!(k in s[0]) || \
-                                   s[1][k] != s[0][k])) ? "{" : "") \
-                                "\042" s[1][k] "\042:";
+                        json[0] = json[0]                      \
+                            ((k > _nvl_cambia(s) &&            \
+                              (!(k in s[0]) ||                 \
+                               _cmpi(s, k))) ? "{" : "")       \
+                            "\042" s[1][k] "\042:";
             }
             # 3 - Nivel igual respecto al anterior
             else if (n[1] == n[0]) {
@@ -217,11 +217,11 @@ function lstmJson(lista, json,      i, j, k, z, s, n, x)
                 json[0] = json[0] ",";
                 for (k = _nvl_cambia(s); k <= n[1]; k++)
                     if (s[1][k] ~ /^[0-9]+$/) {
-                        if (!(s[0][k] ~ /^[0-9]+$/ && \
-                              (s[1][k]+0) > (s[0][k]+0)))
+                        if (!(s[0][k] ~ /^[0-9]+$/ &&          \
+                              (s[1][k]+0) > (s[0][k]+0)))      \
                             json[0] = json[0] "[";
                     } else
-                        json[0] = json[0] \
+                        json[0] = json[0]                      \
                             ((k == _nvl_cambia(s)) ? "" : "{") \
                             "\042" s[1][k] "\042:";
             }
@@ -242,10 +242,10 @@ function lstmJson(lista, json,      i, j, k, z, s, n, x)
         }
         
         if (lista[i][j][1] != "")
-            json[0] = json[0] \
-                    ((lista[i][j][2] == "s") ? "\042" : "") \
-                    lista[i][j][1] \
-                    ((lista[i][j][2] == "s") ? "\042" : "") ",";
+            json[0] = json[0]                                  \
+                ((lista[i][j][2] == "s") ? "\042" : "")        \
+                lista[i][j][1]                                 \
+                ((lista[i][j][2] == "s") ? "\042" : "") ",";
         else
             if (lista[i][j][2] == "s")
                 json[0] = json[0] "\042\042,";

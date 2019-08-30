@@ -109,6 +109,20 @@ function _xedni(cadena, crt,      i)
 
 ##
 #
+# Compara dos subindices o identificadores de elemento "hasta cierto nivel"
+#
+##
+function _cmpi (subid, nvl,      i)
+{
+    PROCINFO["sorted_in"]  = "@ind_num_desc";
+    for (i in subid[1])
+        if (subid[1][i] != subid[0][i])
+            return 1;
+    return 0;
+}
+
+##
+#
 # Cada elemento de la lista es a su vez una lista de 3 elementos:
 # lista[X][Y]; donde X es el índice JSON, e Y será:
 # [1] = Es el valor del elemento JSON
