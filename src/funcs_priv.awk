@@ -56,23 +56,16 @@ function __trim(str)
     return str;
 }
 
-##
-#
-# Transforma puntero a cadena JSON en una lista de elementos separados por
-# comas. Si es objeto, elimina llave al inicio y fin de la cadena. Si es
-# colección, elimina corchetes al inicio y fin de la cadena.
-#
-# Argumentos:
-#   - json = Puntero a cadena JSON.
-##
-function _json_a_lst_elmtos(json)
-{
-    return gsub(/(^[ \t]*[\{\[]{1}|[\}\]]{1}[ \t]*$)/, "", json[0]);
-}
-
 function _esjson(txt)
 {
     if (txt ~/^[ \t]*[\{\[]{1}.*[\}\]]{1}[ \t]*$/)
+        return 1;
+    return 0;
+}
+
+function _esjsnulo(txt)
+{
+    if (txt ~/^[ \t]*[\{\[]{1}[\}\]]{1}[ \t]*$/)
         return 1;
     return 0;
 }
@@ -121,6 +114,20 @@ function _cmpi (subid, nvl,      i)
     return 0;
 }
 
+function _esmlst(elmt)
+{
+    if (elmt ~ /^[0-9]+$/)
+        return 1;
+    return 0;
+}
+
+function _nombre(nombre)
+{
+    if (length(nombre))
+        return "\042" nombre "\042:";
+    return "";
+}
+
 ##
 #
 # Cada elemento de la lista es a su vez una lista de 3 elementos:
@@ -140,6 +147,8 @@ function _nuevo(lista, elem, valor, pos,      n, i)
         valor[0] = substr(valor[0], i + 1, (length(valor[0]) - i) + 1);
     }
 
+    #if (valor["pc"] == "[") n = "[" n "]";
+    
     n = _id(n, elem);
     if (pos == 1)
         lista[CNTSEC][n][3] = 1;
