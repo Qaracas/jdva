@@ -53,28 +53,28 @@ function jsonLstm(json, lista, id,      a, x, c, i, j, n)
         CNTSEC = 1;
         delete lista;
     }
-    c = n = ""; a = i = j = 1;
-    x["{"] = x["}"] = x["["] = x["]"] = 0;
-    x["\042"] = x["sal"] = 0;
-    x["pc"] = substr(json[0], 1, 1);
+    
+    x["{"] = index(json[0], "{");
+    x["["] = index(json[0], "[");
+    
+    if (x["{"] == 0)
+        x["pc"] = "[";
+    else if (x["["] == 0)
+        x["pc"] = "{";
+    else {
+        if (x["["] < x["{"])
+            x["pc"] = "[";
+        else
+            x["pc"] = "{";
+    }
 
-    # Ojo!! Aquí estamos modificando la cadena.
-    # La dejamos como estaba en ((1))
-    _json_a_lst_elmtos(json);
-
-    for (;;) {
-        if ((c = substr(json[0], i++, 1)) == "") {
-            if (x["sal"] >= 1)
-                break;
-            else {
-                x["sal"]++;
-                c = ",";
-            }
-        }
-        if (c == "\134") {
-            i++;
+    c = n = ""; j = 1; i = a = x[x["pc"]] + 1;
+    x["fin"] = _xedni(json[0], ((x["pc"] == "{") ? "}" : "]" ));
+    x["\042"] = x["{"] = x["["] = x["]"] = x["}"] = 0;
+    
+    for (; (c = substr(json[0], i++, 1)); ) {
+        if ((x["\042"] % 2 == 1) && c == "\134" && i++)
             continue;
-        }
         switch (c) {
         case "{":
             x["{"]++;
@@ -91,7 +91,10 @@ function jsonLstm(json, lista, id,      a, x, c, i, j, n)
         case "\042":
             x["\042"]++;
             break;
-        case ",":
+        default:
+            break;
+        }
+        if (c == "," || (i >= x["fin"] && i++)) {
             if ((x["\042"] % 2 == 0) &&
                 (x["{"] == x["}"]) && (x["["] == x["]"]))
             {
@@ -104,20 +107,17 @@ function jsonLstm(json, lista, id,      a, x, c, i, j, n)
                         _esjson(lista[CNTSEC][n][1]))
                     {
                         x[0] = lista[CNTSEC][n][1];
-                        delete lista[CNTSEC][n];
+                        delete lista[CNTSEC];
                         jsonLstm(x, lista, n);
                     }
                 }
                 CNTSEC++;
                 a = i;
             }
-            break;
-        default:
-            break;
+            if (i >=  x["fin"])
+                return;
         }
     }
-    # ((1))
-    json[0] = x["pc"] json[0] ((x["pc"] == "{") ? "}" : "]");
 }
 
 function lstmJson(lista, json,      i, j, k, z, s, n, x)
@@ -142,10 +142,10 @@ function lstmJson(lista, json,      i, j, k, z, s, n, x)
         # 1 - Inicio cadena JSON
         if (i == 1) {
             for (k in s[1])
-                if (s[1][k] !~ /^[0-9]+$/)
-                    json[0] = json[0] "{" "\042" s[1][k] "\042:";
-                else 
+                if (_esmlst(s[1][k]))
                     json[0] = json[0] "[";
+                else 
+                    json[0] = json[0] "{" _nombre(s[1][k]);
         }
         # 2, 3, 4 - Inicio nuevo elemento
         else if (i > 1 && 3 in lista[i][j]) {
@@ -154,13 +154,13 @@ function lstmJson(lista, json,      i, j, k, z, s, n, x)
                 # Cerrar listas anteriores, si las hay
                 gsub(/,$/, "", json[0]);
                 for (k = n[0]; k > _nvl_cambia(s); k--)
-                    if (s[0][k] ~ /^[0-9]+$/)
+                    if (_esmlst(s[0][k]))
                         json[0] = json[0] "]";
                     else
                         json[0] = json[0] "}";
                 json[0] = json[0] ",";
                 for (k = _nvl_cambia(s); k <= n[1]; k++)
-                    if (s[1][k] ~ /^[0-9]+$/)
+                    if (_esmlst(s[1][k]))
                         json[0] = json[0]                      \
                             ((s[1][k]+0 == 1) ? "[" : "");
                     else
@@ -168,44 +168,44 @@ function lstmJson(lista, json,      i, j, k, z, s, n, x)
                             ((k > _nvl_cambia(s) &&            \
                               (!(k in s[0]) ||                 \
                                _cmpi(s, k))) ? "{" : "")       \
-                            "\042" s[1][k] "\042:";
+                            _nombre(s[1][k]);
             }
             # 3 - Nivel igual respecto al anterior
             else if (n[1] == n[0]) {
                 gsub(/,$/, "", json[0]);
                 for (k = n[0]; k > _nvl_cambia(s); k--)
-                    if (s[0][k] ~ /^[0-9]+$/)
+                    if (_esmlst(s[0][k]))
                         json[0] = json[0] "]";
                     else
                         json[0] = json[0] "}";
                 json[0] = json[0] ",";
                 for (k = _nvl_cambia(s); k < n[0]; k++) {
-                    if (k == _nvl_cambia(s) && s[1][k] !~ /^[0-9]+$/)
-                        json[0] = json[0] "\042" s[1][k] "\042:";
-                    if (s[1][k+1] ~ /^[0-9]+$/)
+                    if (k == _nvl_cambia(s) && !(_esmlst(s[1][k])))
+                        json[0] = json[0] _nombre(s[1][k]);
+                    if (_esmlst(s[1][k+1]))
                         json[0] = json[0] "[";
                     else
-                        json[0] = json[0] "{" "\042" s[1][k+1] "\042:";
+                        json[0] = json[0] "{" _nombre(s[1][k+1]);
                 }
             }
             # 4 - Nivel inferior respecto al anterior
             else if (n[1] < n[0]) {
                 gsub(/,$/, "", json[0]);
                 for (k = n[0]; k > _nvl_cambia(s); k--)
-                    if (s[0][k] ~ /^[0-9]+$/)
+                    if (_esmlst(s[0][k]))
                         json[0] = json[0] "]";
                     else
                         json[0] = json[0] "}";
                 json[0] = json[0] ",";
                 for (k = _nvl_cambia(s); k <= n[1]; k++)
-                    if (s[1][k] ~ /^[0-9]+$/) {
-                        if (!(s[0][k] ~ /^[0-9]+$/ &&          \
+                    if (_esmlst(s[1][k])) {
+                        if (!(_esmlst(s[0][k]) &&              \
                               (s[1][k]+0) > (s[0][k]+0)))      \
                             json[0] = json[0] "[";
                     } else
                         json[0] = json[0]                      \
                             ((k == _nvl_cambia(s)) ? "" : "{") \
-                            "\042" s[1][k] "\042:";
+                            _nombre(s[1][k]);
             }
         }
         # 5 - Nuevo elemento
@@ -213,16 +213,16 @@ function lstmJson(lista, json,      i, j, k, z, s, n, x)
             if (n[1] < n[0]) {
                 gsub(/,$/, "", json[0]);
                 for (k = n[0]; k > _nvl_cambia(s); k--)
-                    if (s[0][k] ~ /^[0-9]+$/)
+                    if (_esmlst(s[0][k]))
                         json[0] = json[0] "]";
                     else
                         json[0] = json[0] "}";
                 json[0] = json[0] ",";
             }
-            if (s[1][n[1]] !~ /^[0-9]+$/)
-                json[0] = json[0] "\042" s[1][n[1]] "\042:";
+            if (!(_esmlst(s[1][n[1]])))
+                json[0] = json[0] _nombre(s[1][n[1]]);
         }
-        
+
         if (lista[i][j][1] != "")
             json[0] = json[0]                                  \
                 ((lista[i][j][2] == "s") ? "\042" : "")        \
@@ -236,18 +236,18 @@ function lstmJson(lista, json,      i, j, k, z, s, n, x)
         if (++x[0] == length(lista)) {
             gsub(/,$/, "", json[0]);
             for (k = n[1]; k > 0; k--)
-                if (s[1][k] !~ /^[0-9]+$/)
-                    json[0] = json[0] "}";
-                else 
+                if (_esmlst(s[1][k]))
                     json[0] = json[0] "]";
+                else 
+                    json[0] = json[0] "}";
             break;
         }
-        
+
         n[0] = n[1];
         delete s[0];
         for (z in s[1])
             s[0][z] = s[1][z];
-    }    
+    }
 }
 
 function pinta(lista, frmt,      i, j, f)
