@@ -36,15 +36,6 @@ function _perror(txt)
     exit -1;
 }
 
-##
-#
-# Elimina blancos y tabuladores al inicio y fin de una cadena.
-#
-# Argumentos:
-#   - str = Puntero a cadena.
-#   - idx = (Opcional) Elemento de la cadena.
-#
-##
 function _trim(str, idx)
 {
     return gsub(/^[ \t]*\042?|\042?[ \t]*$/, "", str[idx]);
@@ -100,6 +91,26 @@ function _xedni(cadena, crt,      i)
     return i
 }
 
+function _ppctr(refcad,      i, c)
+{
+    i = 1;
+    for (; (c = substr(refcad[0], i, 1)) != ""; i++) {
+        if (c !~ /[[:space:][:cntrl:]]/)
+            return i;
+    }
+    return 0;
+}
+
+function _puctr(refcad,      i, c)
+{
+    i = length(refcad[0]);
+    for (; (c = substr(refcad[0], i, 1)) != ""; i--) {
+        if (c !~ /[[:space:][:cntrl:]]/)
+            return i;
+    }
+    return 0;
+}
+
 ##
 #
 # Compara dos subindices o identificadores de elemento "hasta cierto nivel"
@@ -114,15 +125,26 @@ function _cmpi (subid, nvl,      i)
     return 0;
 }
 
-function _esmlst(elmt)
+function _esmlst(sid, elmnt)
 {
-    if (elmt ~ /^[0-9]+$/)
+    # Listas vacías
+    if (length(elmnt) && 4 in elmnt && elmnt[1] == "" && sid == "1") {
+        if (elmnt[4] == 1)
+            return 1;
+        else
+            return 0;
+    }
+    if (sid ~ /^[0-9]+$/)
         return 1;
     return 0;
 }
 
-function _nombre(nombre)
+function _nombre(nombre, elmnt)
 {
+    # Listas vacías
+    if (length(elmnt) && 4 in elmnt &&
+        elmnt[1] == "" && nombre == "1" && elmnt[4] == 0)
+        return "";
     if (length(nombre))
         return "\042" nombre "\042:";
     return "";
@@ -138,26 +160,15 @@ function _nombre(nombre)
 #       NULO = nada: elemento medio o final de lista u objeto
 #
 ##
-function _nuevo(lista, elem, valor, pos,      n, i)
-{
-    n = pos;
-    # Si es un par "nombre : valor" modificar valor y pos
-    if ((i = _i2puntos(valor)) > 0) {
-        n = __trim(substr(valor[0], 1, i - 1));
-        valor[0] = substr(valor[0], i + 1, (length(valor[0]) - i) + 1);
-    }
-
-    #if (valor["pc"] == "[") n = "[" n "]";
-    
-    n = _id(n, elem);
+function _nuevo(lista, elm, val, pos)
+{    
     if (pos == 1)
-        lista[CNTSEC][n][3] = 1;
+        lista[CNTSEC][elm][3] = 1;
 
-    lista[CNTSEC][n][2] = (valor[0] ~ /^[ \t]*\042/) ? "s" : "n";
-    _trim(valor, 0);
-    lista[CNTSEC][n][1] = valor[0];
-
-    return n;
+    lista[CNTSEC][elm][2] = (val[0] ~ /^[ \t]*\042/) ? "s" : "n";
+    
+    _trim(val, 0);
+    lista[CNTSEC][elm][1] = val[0];
 }
 
 ##
@@ -197,7 +208,7 @@ function _pinta_sin_frmt(txt, idc, frmt,      k, s, d)
     split(idc, s, SUBSEP);
     d = "";
     for (k in s)
-        d = d "[" s[k] "]";
+        d = d ( (_esmlst(s[k], txt)) ?  "[" s[k] "]" : "(" s[k] ")" );
     if (txt[2] == "s")
         printf("%s = \042%s\042\n", d, txt[1]);
     else
@@ -222,6 +233,7 @@ function _mismo_padre(a, b,      s1, s2, l1, l2)
 function _copia(a, b, m, n,      i)
 {
     for (i in a[m]) {
+
         b[n][i][1] = a[m][i][1];
         b[n][i][2] = a[m][i][2];
         if (3 in a[m][i])
