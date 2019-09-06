@@ -43,15 +43,6 @@ BEGIN {
     NULL  = "_null_";
 }
 
-##
-#
-# Trasformar JSON en lista multidimensional
-#
-# Argumentos:
-#   - json  = Puntero a cadena JSON.
-#   - lista = Colección con los elementos de la cadena JSON original.
-#
-##
 function jsonLstm(json, lista, id,      a, x, c, i, j, n)
 {
     if (!isarray(json)) {
@@ -129,15 +120,6 @@ function jsonLstm(json, lista, id,      a, x, c, i, j, n)
     json[0] = x["pc"] json[0] ((x["pc"] == "{") ? "}" : "]");
 }
 
-##
-#
-# Trasformar lista multidimensional en JSON
-#
-# Argumentos:
-#   - json  = Puntero a cadena JSON.
-#   - lista = Colección de elementos estructurados.
-#
-##
 function lstmJson(lista, json,      i, j, k, z, s, n, x)
 {
     if (!isarray(lista) || !isarray(json)) {
@@ -268,15 +250,6 @@ function lstmJson(lista, json,      i, j, k, z, s, n, x)
     }    
 }
 
-##
-#
-# Pinta por pantalla una lista multidimensional
-#
-# Argumentos:
-#   - lista  = Colección con los elementos del texto JSON.
-#   - frmt   = Formato de representación. Por ejem.: "%s ,"
-#
-##
 function pinta(lista, frmt,      i, j, f)
 {
     if (length(frmt) == 0)
@@ -293,20 +266,6 @@ function pinta(lista, frmt,      i, j, f)
     }
 }
 
-##
-#
-# Devuelve el valor de cualquier elemento de la lista JSON
-#
-# Argumentos:
-#   - lista  = Colección con los elementos del texto JSON.
-#   - elmnt  = Elemento a buscar en formato "a.b.c".
-#
-# Resultado:
-#   - Si el elemento existe en la lista devuelve su valor y, ademas,
-#     pone RFUNC["trae"] a 1.
-#   - Si no existe el elemento devuelve "" y, además, pone RFUNC["trae"] a 0.
-#
-##
 function trae(lista, elmnt,      i)
 {
     gsub(/\./, SUBSEP, elmnt);
@@ -321,20 +280,6 @@ function trae(lista, elmnt,      i)
     return "";
 }
 
-##
-#
-# Elimina cualquier elemento de la lista JSON
-#
-# Argumentos:
-#   - lista  = Colección con los elementos del texto JSON.
-#   - elmnt  = Elemento a buscar en formato "a.b.c".
-#
-# Resultado:
-#   - Si el elemento existe en la lista lo elimina y devuelve su posición.
-#     Ademas, pone RFUNC["quita"] a 1.
-#   - Si no existe el elemento devuelve 0 y, además, pone RFUNC["quita"] a 0.
-#
-##
 function quita(lista, elmnt,      i, j, k, l, d, s, p, n)
 {
     RFUNC["quita"] = 0;
@@ -383,21 +328,6 @@ function quita(lista, elmnt,      i, j, k, l, d, s, p, n)
         return 0;
 }
 
-##
-#
-# Añade un nuevo elemento a la lista MJ o modifica el valor de uno 
-# ya existente.
-#
-# Argumentos:
-#   - lista = Lista multidimensional MJ.
-#   - elmnt = Elemento para añadir/modificar en formato "a.b.c".
-#   - valor = Valor del nuevo elemento o nuevo valor para el elemento ya 
-#             existente.
-# Resultado:
-#   - Devuelve la posición del nuevo elemento la posición del que se haya
-#     modificado en caso de que existiese. 
-#
-##
 function pon(lista, elmnt, valor,      i, j, k, x, s, lst, mp)
 {
     gsub(/\./, SUBSEP, elmnt);
