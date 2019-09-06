@@ -64,8 +64,12 @@ function jsonLstm(json, lista, id,      a, x, c, i, j, k, n)
     # Listas u objetos vacíos
     if (i == x["fin"]) {
         x[0] = "";
-        n = _id(j, id);
+        n = (x["pmc"] == "[" ? "[" j "]" : j);
+        n = _id(n, id);
         _nuevo(lista, n, x, j);
+        # Para que "lstmJson()" sepa si es lista u objeto
+        if (x["pmc"] == "{")
+            lista[CNTSEC][n][4] = 1;
         return;
     }
     
@@ -96,7 +100,7 @@ function jsonLstm(json, lista, id,      a, x, c, i, j, k, n)
                 (x["{"] == x["}"]) &&   \
                 (x["["] == x["]"]))
             {
-                n = j;
+                n = "[" j "]";
                 x[0] = substr(json[0], a, (i - a - 1));
                 if (_esjson(x[0]))
                     jsonLstm(x, lista, _id(n, id));
@@ -146,7 +150,7 @@ function lstmJson(lista, json,      i, j, k, z, s, n, x)
                 if (_esmlst(s[1][k]))
                     json[0] = json[0] "[";
                 else
-                    json[0] = json[0] "{" _nombre(s[1][k]);
+                    json[0] = json[0] "{" _nombre(s[1][k], lista[i][j]);
         }
         # 2, 3, 4 - Inicio nuevo elemento
         else if (i > 1 && 3 in lista[i][j]) {
@@ -163,13 +167,13 @@ function lstmJson(lista, json,      i, j, k, z, s, n, x)
                 for (k = _nvl_cambia(s); k <= n[1]; k++)
                     if (_esmlst(s[1][k]))
                         json[0] = json[0]                      \
-                            ((s[1][k]+0 == 1) ? "[" : "");
+                            ((_t(s[1][k])+0 == 1) ? "[" : "");
                     else
                         json[0] = json[0]                      \
                             ((k > _nvl_cambia(s) &&            \
                               (!(k in s[0]) ||                 \
                                _cmpi(s, k))) ? "{" : "")       \
-                            _nombre(s[1][k]);
+                            _nombre(s[1][k], lista[i][j]);
             }
             # 3 - Nivel igual respecto al anterior
             else if (n[1] == n[0]) {
@@ -182,11 +186,11 @@ function lstmJson(lista, json,      i, j, k, z, s, n, x)
                 json[0] = json[0] ",";
                 for (k = _nvl_cambia(s); k < n[0]; k++) {
                     if (k == _nvl_cambia(s) && !(_esmlst(s[1][k])))
-                        json[0] = json[0] _nombre(s[1][k]);
+                        json[0] = json[0] _nombre(s[1][k], lista[i][j]);
                     if (_esmlst(s[1][k+1]))
                         json[0] = json[0] "[";
                     else
-                        json[0] = json[0] "{" _nombre(s[1][k+1]);
+                        json[0] = json[0] "{" _nombre(s[1][k+1], lista[i][j]);
                 }
             }
             # 4 - Nivel inferior respecto al anterior
@@ -200,13 +204,13 @@ function lstmJson(lista, json,      i, j, k, z, s, n, x)
                 json[0] = json[0] ",";
                 for (k = _nvl_cambia(s); k <= n[1]; k++)
                     if (_esmlst(s[1][k])) {
-                        if (!(_esmlst(s[0][k]) &&              \
-                              (s[1][k]+0) > (s[0][k]+0)))      \
+                        if (!(_esmlst(s[0][k]) &&                       \
+                              (_t(s[1][k])+0) > (_t(s[0][k])+0)))       \
                             json[0] = json[0] "[";
                     } else
                         json[0] = json[0]                      \
                             ((k == _nvl_cambia(s)) ? "" : "{") \
-                            _nombre(s[1][k]);
+                            _nombre(s[1][k], lista[i][j]);
             }
         }
         # 5 - Nuevo elemento
@@ -221,7 +225,7 @@ function lstmJson(lista, json,      i, j, k, z, s, n, x)
                 json[0] = json[0] ",";
             }
             if (!(_esmlst(s[1][n[1]])))
-                json[0] = json[0] _nombre(s[1][n[1]]);
+                json[0] = json[0] _nombre(s[1][n[1]], lista[i][j]);
         }
         
         if (lista[i][j][1] != "")

@@ -47,6 +47,12 @@ function __trim(str)
     return str;
 }
 
+function _t(str)
+{
+    gsub(/^[ \t]*\[?|\]?[ \t]*$/, "", str);
+    return str;
+}
+
 function _esjson(txt)
 {
     if (txt ~/^[ \t]*[\{\[]{1}.*[\}\]]{1}[ \t]*$/)
@@ -113,16 +119,16 @@ function _puctr(refcad,      i, c)
     return 0;
 }
 
-function _esmlst(elmt)
+function _esmlst(sid)
 {
-    if (elmt ~ /^[0-9]+$/)
+    if (sid ~ /^\[[0-9]+\]$/)
         return 1;
     return 0;
 }
 
-function _nombre(nombre)
+function _nombre(nombre, elmt)
 {
-    if (length(nombre))
+    if (length(nombre) && !(nombre == "1" && 4 in elmt))
         return "\042" nombre "\042:";
     return "";
 }
@@ -170,7 +176,7 @@ function _pinta_sin_frmt(txt, idc, frmt,      k, s, d)
     split(idc, s, SUBSEP);
     d = "";
     for (k in s)
-        d = d "[" s[k] "]";
+        d = d ( _esmlst(s[k]) ?  s[k] : "(" s[k] ")" );
     if (txt[2] == "s")
         printf("%s = \042%s\042\n", d, txt[1]);
     else
