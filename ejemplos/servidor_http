@@ -73,8 +73,8 @@ BEGIN {
 
         idc = 1;
         for (;;) {
-            if ("/" trae(lcfg, "flujo." idc ".objeto") == StdHttp["objeto"] ||
-                trae(lcfg, "flujo." idc ".objeto") == "")
+            if ("/" trae(lcfg, "flujo.[" idc "].objeto") == StdHttp["objeto"] ||
+                trae(lcfg, "flujo.[" idc "].objeto") == "")
                 break;
             idc++;
         }
@@ -101,7 +101,7 @@ BEGIN {
 
         ## INI - Llamar controlador y hacer respuesta ##
         RS = _RS;
-        control = trae(lcfg, "flujo." idc ".controlador");
+        control = trae(lcfg, "flujo.[" idc "].controlador");
         if (!@control(CnltHttp, cad_json)) {
             ldec = cnt_bytes(cad_json);
             printf "%s", "Content-Length: " ldec CRLF CRLF     |& ServHttp;

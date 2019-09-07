@@ -98,7 +98,7 @@ function crea_especie(c, cad_json,      i, lst, dr, regiones)
     dr = 1;
     for (i in regiones)
         if (c[i + 10] == "1")
-            pon(lst, "distribución.regiones." dr++, regiones[i]);
+            pon(lst, "distribución.regiones.[" dr++ "]", regiones[i]);
 
     lstmJson(lst, cad_json);
 }
