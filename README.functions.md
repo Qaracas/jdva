@@ -103,7 +103,7 @@ $ echo "[{\"nombre\": \"alfa\",\"edad\": 34}, {\"nombre\": \"beta\", \"edad\": 3
 > gawk -i bbl_jdva.awk '{
 >   cad_json[0]=$0;
 >   jsonLstm(cad_json, lista);
->   print trae(lista, "2.edad");
+>   print trae(lista, "[2].edad");
 > }'
 36
 ```
@@ -129,7 +129,7 @@ $ echo "[{\"nombre\": \"alfa\",\"edad\": 34}, {\"nombre\": \"beta\", \"edad\": 3
 > gawk -i bbl_jdva.awk '{
 >   cad_json[0]=$0;
 >   jsonLstm(cad_json, lista);
->   quita(lista, "1.edad");
+>   quita(lista, "[1].edad");
 >   lstmJson(lista, cad_json);
 >   sangra(cad_json);
 > }'
