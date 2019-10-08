@@ -80,8 +80,8 @@ This library aims to conform with the JSON (JavaScript Object Notation) data exc
 
 ## Authors
 
-* Initial version - [Qaracas](https://github.com/Qaracas)
-* [List of contributors](https://github.com/Qaracas/jdva/contributors)
+* [Ulpiano Tur de Vargas](https://github.com/Qaracas)
+* [And contributors](https://github.com/Qaracas/jdva/contributors)
 
 ## License
 

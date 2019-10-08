@@ -78,8 +78,8 @@ Esta librería pretende ser compatible con el formato de intercambio de datos JS
 
 ## Autores
 
-* Versión inicial - [Qaracas](https://github.com/Qaracas)
-* [Lista de contribuyentes](https://github.com/Qaracas/jdva/contributors)
+* [Ulpiano Tur de Vargas](https://github.com/Qaracas)
+* [Y CIA](https://github.com/Qaracas/jdva/contributors)
 
 ## Licencia
 
