@@ -79,7 +79,7 @@ Esta librería pretende ser compatible con el formato de intercambio de datos JS
 ## Autores
 
 * [Ulpiano Tur de Vargas](https://github.com/Qaracas)
-* [Y CIA](https://github.com/Qaracas/jdva/contributors)
+* [Y Cía](https://github.com/Qaracas/jdva/contributors)
 
 ## Licencia
 
