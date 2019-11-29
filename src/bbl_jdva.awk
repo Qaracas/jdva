@@ -74,8 +74,8 @@ function jsonLstm(json, lista, id,      a, x, c, i, j, k, n)
     }
     
     for (; (c = substr(json[0], i++, 1)); ) {
-        if ((x["\042"] % 2 == 1) && c == "\134" && i++)
-            continue;        
+        if (x["\042"] % 2 && c == "\134" && i++)
+            continue;
         switch (c) {
         case "{":
             x["{"]++;
