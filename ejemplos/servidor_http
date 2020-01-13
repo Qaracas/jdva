@@ -65,8 +65,6 @@ BEGIN {
         proc_sol_http($1, $2, $3);
 
         if (StdHttp["metodo"] != "GET") {
-            codEstado = 200;
-            txtEstado = "OK";
             codEstado = 405;
             txtEstado = "Method Not Allowed";
         }
@@ -80,8 +78,6 @@ BEGIN {
         }
 
         if (RFUNC["trae"] == 0) {
-            codEstado = 200;
-            txtEstado = "OK";
             codEstado = 404;
             txtEstado = "Not Found";
         }
