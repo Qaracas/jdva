@@ -411,22 +411,19 @@ function sangra(json,      x, c, d, i, t, e, tope, elmt)
     if (!isarray(json)) {
         _perror("El primer argumento debe ser un puntero.");
     }
-    
-    if (RS !~ /^\r?\n$/)
-        _perror("Separador de línea incorrecto.");
-    
+
     c = d = tope = elmt = "";
     i = t = 1; t_max = 100; e = 0;
     x["{"] = x["}"] = x["["] = x["]"] = x["\042"] = 0;
-    
+
     while ((c = substr(json[0], i++, 1)) != "") {
         if (c ~ /[ \t]/ && (x["\042"] % 2 == 0))
             continue;
-        
+
         switch (c) {
         case "{":
             x["{"]++; e = t = 1;
-            tope = tope c RS _blancos(x);
+            tope = tope c "\n" _blancos(x);
             break;
         case "}":
             x["}"]++;
@@ -435,12 +432,12 @@ function sangra(json,      x, c, d, i, t, e, tope, elmt)
                 gsub(/\042:/, "\042: ", elmt);
                 tope = tope elmt c;
             } else 
-                tope = tope RS _blancos(x) c;
+                tope = tope "\n" _blancos(x) c;
             e = 0;
             break;
         case "[":
             x["["]++; e = 1;
-            tope = tope c RS _blancos(x);
+            tope = tope c "\n" _blancos(x);
             break;
         case "]":
             x["]"]++;
@@ -448,7 +445,7 @@ function sangra(json,      x, c, d, i, t, e, tope, elmt)
                 gsub(/\r?\n[ ]*[^\r?\n]*$/, "", tope);
                 tope = tope elmt c;
             } else
-                tope = tope RS _blancos(x) c;
+                tope = tope "\n" _blancos(x) c;
             e = 0;
             break;
         case "\042":
@@ -457,7 +454,7 @@ function sangra(json,      x, c, d, i, t, e, tope, elmt)
             break;
         case ",":
             if (e) e++;
-            tope = tope c ((x["\042"] % 2 == 0) ? RS _blancos(x) : "");
+            tope = tope c ((x["\042"] % 2 == 0) ? "\n" _blancos(x) : "");
             break;
         case ":":
             tope = tope c ((x["\042"] % 2 == 0) ? " " : "");
