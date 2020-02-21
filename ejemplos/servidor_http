@@ -39,10 +39,10 @@
 @include "servidor_http_ctrl_máquinas.awk";
 
 BEGIN {
+    _RS = RS = "\r?\n";
     delete lcfg;
     lee_config("./servidor_http.conf", lcfg);
 
-    _RS = RS;
     CRLF = RS = "\r\n";
 
     puerto = trae(lcfg, "general.puerto");
@@ -59,10 +59,17 @@ BEGIN {
 
     for (;;) {
         RS = CRLF;
-        ServHttp |& getline;
-        print systime(), strftime();
-        print $3, $1, $2;
-        proc_sol_http($1, $2, $3);
+        i = 0;
+        while ((ServHttp |& getline) > 0) {
+            if (i++ < 1) {
+                print systime(), strftime();
+                print $3, $1, $2;
+                proc_sol_http($1, $2, $3);
+            } else {
+                if (! gsub(/:/, "", $1))
+                    break;
+            }
+        }
 
         if (StdHttp["metodo"] != "GET") {
             codEstado = 405;
@@ -102,11 +109,6 @@ BEGIN {
             ldec = cnt_bytes(cad_json);
             printf "%s", "Content-Length: " ldec CRLF CRLF     |& ServHttp;
             printf "%s", cad_json[0]                           |& ServHttp;
-
-            RS = CRLF;
-            # Ignorar cabeceras enviadas por el cliente
-            while ((ServHttp |& getline) > 0)
-                ;
             close(ServHttp);
             continue;
         }
@@ -116,11 +118,6 @@ BEGIN {
         lhex = sprintf("%x", ldec);
         printf "Transfer-Encoding: chunked" CRLF CRLF          |& ServHttp;
         printf lhex CRLF cad_json[0] CRLF 0 CRLF CRLF          |& ServHttp;
-
-        RS = CRLF;
-        # Ignorar cabeceras enviadas por el cliente
-        while ((ServHttp |& getline) > 0)
-            ;
         close(ServHttp);
     }
 }

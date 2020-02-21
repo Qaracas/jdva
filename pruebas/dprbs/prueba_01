@@ -36,6 +36,7 @@
 @include "bbl_pruebas.awk";
 
 BEGIN {
+    RS = "\r?\n";
     dfdl = "../log/";
     LOG  = dfdl "prueba_01.log";
     fdpj = ARGV[1];

@@ -30,7 +30,7 @@ $ cd jdva
 3. (Opcional) Fijar la variable de entorno [AWKPATH](https://www.gnu.org/software/gawk/manual/gawk.html#AWKPATH-Variable):
 
 ```bash
-(jdva) $ export AWKPATH=${AWKPATH}:.:"$(pwd)""/src"
+(jdva) $ export AWKPATH=${AWKPATH}:"$(pwd)""/src"
 ```
 
 4. (Opcional) Ejecutar programa de validación:

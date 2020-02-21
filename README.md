@@ -32,7 +32,7 @@ $ cd jdva
 3. (Opcional) Set [AWKPATH](https://www.gnu.org/software/gawk/manual/gawk.html#AWKPATH-Variable) environment variable:
 
 ```bash
-(jdva) $ export AWKPATH=${AWKPATH}:.:"$(pwd)""/src"
+(jdva) $ export AWKPATH=${AWKPATH}:"$(pwd)""/src"
 ```
 
 4. (Optional) Run tests program:

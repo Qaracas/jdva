@@ -48,7 +48,7 @@ function busca_especie(cadena, c,      i, ln, bbdd)
 {
     bbdd = "./servidor_http_bbdd_especies.txt";
     while ((getline ln < bbdd) > 0) {
-        patsplit(ln, c, /([^\t]*)|(\"[^\"]+\")/);
+        patsplit(ln, c, /([^\t]*)|(\\"[^\\"]+\\")/);
         for (i in c)
             gsub(/^[ \t]*(\042{1})*|(\042{1})*[ \t]*$/, "", c[i]);
         if (index(tolower(c[1]), tolower(cadena))) {

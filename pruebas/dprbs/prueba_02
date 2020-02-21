@@ -36,6 +36,7 @@
 @include "bbl_pruebas.awk";
 
 BEGIN {
+    RS = "\r?\n";
     dfdl = "../log/";
     dtmp = "tmp/prueba_02/";    # Relativa
 
@@ -59,12 +60,12 @@ BEGIN {
         " > ../pruebas/" dtmp nfpj ";"          \
         "cd \"${_PWD}\""                        \
         );
-    
+
     cad_json01[0] = "";
     while ((getline linea < fdpj) > 0)
         cad_json01[0] = cad_json01[0] linea;
     close(fdpj);
-    
+
     fdpk = "../" dtmp nfpj;
     cad_json02[0] = "";
     while ((getline linea < fdpk) > 0)
@@ -74,7 +75,7 @@ BEGIN {
     plog("Prueba02 ("nfpj"): Convertir JSON_01 en lista_01... ", 1, "INFO");
     jsonLstm(cad_json01, lista01);
     plog("Hecho.\n");
-    
+
     plog("Prueba02 ("nfpj"): Convertir JSON_02 en lista_02... ", 1, "INFO");
     jsonLstm(cad_json02, lista02);
     plog("Hecho.\n");

@@ -54,11 +54,11 @@ BEGIN {
         usar();
 
     cad_json[0] = "";
-        
+
     lstmJson(lista, cad_json);
-    
+
     sangra(cad_json);
-    
+
     exit 0;
 }
 
@@ -68,8 +68,8 @@ function usar()
     "Usar: crea_json [--ayuda]",
     "Pinta por pantalla un texto en formato JSON, creado a partir de la", 
     "siguiente lista multidimensional:";
-    
+
     pinta(lista);
-    
+
     exit -1;
 }

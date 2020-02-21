@@ -36,6 +36,7 @@
 @include "bbl_pruebas.awk";
 
 BEGIN {
+    RS = "\r?\n";
     dfdl = "../log/";
     dejm = "../../ejemplos/";
     dtmp = "tmp/prueba_03/";    # Relativa

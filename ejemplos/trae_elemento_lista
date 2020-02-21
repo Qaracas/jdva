@@ -43,15 +43,16 @@ BEGIN {
     cad_json[0] = "";
     linea = "";
     elemento = "";
-    
+
+    RS = "\r?\n";
     while ((getline linea < ARGV[1]) > 0)
         cad_json[0] = cad_json[0] linea;
     close(ARGV[1]);
-    
+
     jsonLstm(cad_json, lista);
-    
+
     elemento = trae(lista, ARGV[2]);
-    
+
     if (RFUNC["trae"]) {
         print elemento;
         exit 0;

@@ -35,20 +35,19 @@
 @include "bbl_jdva.awk";
 
 BEGIN {
-    if (ARGC == 1 || 
-        ARGC > 2 || 
-        ARGV[1] == "--ayuda")
+    if (ARGC == 1 || ARGC > 2 || ARGV[1] == "--ayuda")
         usar();
-        
+
     cad_json[0] = "";
     linea = "";
 
+    RS = "\r?\n";
     while ((getline linea < ARGV[1]) > 0)
         cad_json[0] = cad_json[0] linea;
     close(ARGV[1]);
-    
+
     sangra(cad_json);
-   
+
     exit 0;
 }
 
